@@ -7,5 +7,7 @@ export default defineConfig({
   plugins: [react(),tailwindcss()],
   server:{
     host:'10.0.0.253',
-    port:3000}
+    port:3000,
+    strictPort: true,
+  }
 })
