@@ -6,7 +6,7 @@ const apiClient = axios.create({
         'Content-Type': 'application/json',
         // Accept: 'application/json',
     },
-    withCredentials: true, // Required for Laravel Sanctum
+    // withCredentials: true, // Required for Laravel Sanctum
 });
 
 // Function to fetch CSRF token before making requests

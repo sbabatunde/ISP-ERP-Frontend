@@ -1,13 +1,11 @@
+// App.jsx
 import React from 'react';
-import Form from './components/Form'
-import SuppliersForm from './components/Suppliers';
+import Layout from './components/Layout';
 
 const App = () => {
     return (
         <div className="container mx-auto p-4">
-            {/* <Form/> */}
-            <SuppliersForm/>
-            
+            <Layout />
         </div>
     );
 };

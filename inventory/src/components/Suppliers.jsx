@@ -4,10 +4,12 @@ import apiClient from "../api/axios";
 export default function SuppliersForm() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    phone: "",
+    contact_name: "",
+    contact_email: "",
+    contact_phone: "",
     address: "",
-    socials: ""
+    socials: [],
+    website: "",
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -23,7 +25,7 @@ export default function SuppliersForm() {
     
     try {
       // await getCsrfToken(); // Ensure CSRF token is set
-      const response = await apiClient.post("/api/suppliers", formData);
+      const response = await apiClient.post("/inventory/suppliers/store", formData);
       console.log("Response:", response.data);
       setSuccess("Supplier information submitted successfully!");
   } catch (error) {
@@ -65,11 +67,22 @@ export default function SuppliersForm() {
             />
           </div>
           <div>
+            <label className="block text-sm font-medium text-gray-700">Contact Name</label>
+            <input 
+              type="text" 
+              name="contact_name" 
+              value={formData.contact_name} 
+              onChange={handleChange} 
+              required
+              className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
+            />
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input 
               type="email" 
-              name="email" 
-              value={formData.email} 
+              name="contact_email" 
+              value={formData.contact_email} 
               onChange={handleChange} 
               required
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
@@ -79,8 +92,8 @@ export default function SuppliersForm() {
             <label className="block text-sm font-medium text-gray-700">Contact Phone</label>
             <input 
               type="tel" 
-              name="phone" 
-              value={formData.phone} 
+              name="contact_phone" 
+              value={formData.contact_phone} 
               onChange={handleChange} 
               required
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
@@ -102,6 +115,17 @@ export default function SuppliersForm() {
               type="text" 
               name="socials" 
               value={formData.socials} 
+              onChange={handleChange} 
+              placeholder="e.g., https://linkedin.com/in/example"
+              className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">website</label>
+            <input 
+              type="text" 
+              name="website" 
+              value={formData.website} 
               onChange={handleChange} 
               placeholder="e.g., https://linkedin.com/in/example"
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"

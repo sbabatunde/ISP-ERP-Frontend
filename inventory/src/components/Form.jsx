@@ -7,7 +7,7 @@ const Form = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await apiClient.get('daily/generator/report/fuel-consumption'); 
+                const response = await apiClient.get('/inventory/suppliers'); 
                 // const response = fetch('http://localhost:8000/api/daily/generator/report/fuel-consumption'); 
                 console.log(response.data);
                 setPosts(response.data);
