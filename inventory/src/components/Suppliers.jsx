@@ -1,5 +1,5 @@
 import { useState } from "react";
-import apiClient, { getCsrfToken } from "../api/axios";
+import apiClient from "../api/axios";
 
 export default function SuppliersForm() {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ export default function SuppliersForm() {
     setSuccess(null);
     
     try {
-      await getCsrfToken(); // Ensure CSRF token is set
+      // await getCsrfToken(); // Ensure CSRF token is set
       const response = await apiClient.post("/api/suppliers", formData);
       console.log("Response:", response.data);
       setSuccess("Supplier information submitted successfully!");
