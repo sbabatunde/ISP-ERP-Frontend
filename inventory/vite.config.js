@@ -6,14 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(),tailwindcss()],
   server:{
-<<<<<<< HEAD
-    host:'10.0.0.253',
-    port:3000,
-    strictPort: true,
-=======
     host: '10.0.0.253', // Your IP
     port:3000,
-    strictPort: true
->>>>>>> 412fff6 (added syscodes logo)
-  }
+    strictPort: true },
 })

@@ -1,15 +1,25 @@
-import React from 'react';
-import Form from './components/Form'
-import SuppliersForm from './components/Suppliers';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Form from "./components/Form";
+import SuppliersForm from "./components/Suppliers";
+import EquipmentForm from "./pages/Equipment-procurement/EquipmentForm";
+// import Sidebartest from "./components/Sidebartest";
 
-const App = () => {
-    return (
-        <div className="container mx-auto p-4">
-            {/* <Form/> */}
-            <SuppliersForm/>
-            
-        </div>
-    );
-};
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="form" element={<Form />} />
+          <Route path="suppliers" element={<SuppliersForm />} />
+          <Route path="equipment-form" element={<EquipmentForm />} />
+          {/* <Route path="about" element={<div>About Page</div>} />
+          <Route path="contact" element={<div>Contact Page</div>} /> */}
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
 
 export default App;
