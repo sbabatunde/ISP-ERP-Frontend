@@ -64,11 +64,11 @@ const Sidebartest = () => {
                         <ul className='ml-10 mt-2 space-y-2 bg-white bg-opacity-10'>
                             <li className='text-black text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md '>
                                 {/* <Link to="/">Suppliers List</Link> */}
-                                <h1>suppliers list</h1>
+                                <Link to="inventory/suppliers-list">Suppliers List</Link>
                             </li>
                             <li className='text-black text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md'>
                                 {/* <h1>suppliers form</h1> */}
-                                <Link to="/suppliers">Suppliers Form</Link>
+                                <Link to="inventory/suppliers">Suppliers Form</Link>
                             </li>
                         </ul>
                     )}
@@ -96,6 +96,9 @@ const Sidebartest = () => {
                             </li>
                             <li className='text-black text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md'>
                             <Link to="/equipment-list">Equipment Procurement List</Link>
+                            </li>
+                            <li className='text-black text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md'>
+                            <Link to="/equipment-type-form">Equipment Type Form</Link>
                             </li>
                         </ul>
                     )}
