@@ -1,21 +1,30 @@
 import { Outlet } from "react-router-dom";
 import Sidebartest from "./Sidebartest";
-import { MdMenu } from 'react-icons/md';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Layout() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(window.innerWidth >= 1024); // Open by default on large screens
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setOpen(true); // Open sidebar on large screens
+            } else {
+                setOpen(false); // Close sidebar on small screens
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     return (
-        <div className="flex h-screen">
-            <div className="md:hidden absolute top-4 left-4 z-40">
-                <MdMenu 
-                    className="text-3xl text-pink-600 cursor-pointer" 
-                    onClick={() => setOpen(!open)} 
-                />
-            </div>
-            <Sidebartest open={open} setOpen={setOpen} />
-            <main className="p-5 flex-1 overflow-auto">
+        <div className="relative w-full h-screen flex">
+            {/* Sidebar Component */}
+            <Sidebartest open={open} toggleSidebar={() => setOpen(!open)} />
+
+            {/* Main Content */}
+            <main className={`flex-1 transition-all duration-300 ${open ? "ml-72" : "ml-0"} p-5`}>
                 <Outlet />
             </main>
         </div>

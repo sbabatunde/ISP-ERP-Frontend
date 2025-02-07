@@ -10,10 +10,12 @@ import { motion } from "framer-motion";
 export default function SuppliersList() {
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [editedSupplier, setEditedSupplier] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const columns = [
     {
@@ -47,7 +49,7 @@ export default function SuppliersList() {
       cell: row => (
         <div className="flex space-x-3">
           <span  onClick={() => handleView(row)} className="text-green-600 cursor-pointer hover:scale-110 transition-transform "><CiRead size={20} /></span>
-          <span className="text-yellow-600 cursor-pointer hover:scale-110 transition-transform"><MdEdit size={20} /></span>
+          <span onClick={() => handleEdit(row)} className="text-yellow-600 cursor-pointer hover:scale-110 transition-transform"><MdEdit size={20} /></span>
           <span className="text-red-600 cursor-pointer hover:scale-110 transition-transform"><MdDelete size={20} /></span>
         </div>
       ),    
@@ -90,11 +92,28 @@ export default function SuppliersList() {
     setIsModalOpen(true);
   };
 
+  const handleEdit = (supplier) => {
+    setEditedSupplier({ ...supplier }); // Clone to avoid direct state mutation
+    setIsEditModalOpen(true);
+  };
+
+
+  const handleUpdateSupplier = async () => {
+    try {
+      const response = await apiClient.put(`/inventory/suppliers/update`, editedSupplier);
+      setSuppliers(suppliers.map(s => (s.id === editedSupplier.id ? response.data.data : s)));
+      setIsEditModalOpen(false);
+    } catch (err) {
+      console.error("Update failed:", err.response?.data?.message || err.message);
+    }
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedSupplier(null);
   };
 
+  
   if (loading) {
     return <p className="text-center mt-6 text-gray-500 animate-pulse">Loading suppliers...</p>;
   }
@@ -164,6 +183,31 @@ export default function SuppliersList() {
           </div>
         </motion.div>
       )}
+
+        {/* Edit Modal */}
+        {isEditModalOpen && (
+          <motion.div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg w-1/3">
+              <button onClick={() => setIsEditModalOpen(false)} className="absolute top-3 right-3"><FiDelete /></button>
+              <h2 className="text-2xl font-bold mb-4">Edit Supplier</h2>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+                value={editedSupplier?.name || ""}
+                onChange={(e) => setEditedSupplier({ ...editedSupplier, name: e.target.value })}
+              />
+              <input
+                type="email"
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+                value={editedSupplier?.contact_email || ""}
+                onChange={(e) => setEditedSupplier({ ...editedSupplier, contact_email: e.target.value })}
+              />
+              <button onClick={handleUpdateSupplier} className="bg-blue-500 text-white px-4 py-2 rounded">
+                Save Changes
+              </button>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );

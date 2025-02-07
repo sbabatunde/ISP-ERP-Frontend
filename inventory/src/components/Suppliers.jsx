@@ -13,6 +13,8 @@ export default function SuppliersForm() {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,15 +24,21 @@ export default function SuppliersForm() {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setIsSubmitting(true);
+    setIsSubmitted(false);
     
     try {
       // await getCsrfToken(); // Ensure CSRF token is set
       const response = await apiClient.post("/inventory/suppliers/store", formData);
       console.log("Response:", response.data);
       setSuccess("Supplier information submitted successfully!");
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      setTimeout(() => setIsSubmitted(false), 2500);
   } catch (error) {
       console.error("Error submitting form:", error);
       setError(error.response?.data?.message || "Failed to submit supplier information.");
+      setIsSubmitting(false);
   }
   };
 // );
@@ -49,7 +57,7 @@ export default function SuppliersForm() {
 //   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex items-center justify-center  bg-gradient-to-r from-pink-500 to-pink-200 p-4">
       <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Supplier Registration</h2>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
@@ -131,11 +139,18 @@ export default function SuppliersForm() {
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
-          <button 
-            type="submit" 
-            className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition"
+          <button
+            type="submit"
+            className={`relative flex justify-center items-center gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+              isSubmitting || isSubmitted ? "registering" : ""
+            }`}
           >
-            Submit
+            <span className={`text-2xl transition-transform duration-[2s] ${isSubmitting ? "translate-x-[-250px]" : isSubmitted ? "translate-x-[34px]" : ""}`}>
+              {isSubmitted ? "✔" : "📩"}
+            </span>
+            <span className={`text-lg font-semibold transition-transform duration-[2s] ${isSubmitting ? "translate-x-[300px]" : isSubmitted ? "translate-x-[34px]" : "translate-x-0"}`}>
+              {isSubmitting ? "Submitting..." : isSubmitted ? "Submitted Successfully" : "Submit"}
+            </span>
           </button>
         </form>
       </div>
