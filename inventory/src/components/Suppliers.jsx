@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import apiClient from "../api/axios";
 
 export default function SuppliersForm() {
@@ -11,6 +12,7 @@ export default function SuppliersForm() {
     socials: [],
     website: "",
   });
+  const navigate= useNavigate();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,6 +37,7 @@ export default function SuppliersForm() {
       setIsSubmitting(false);
       setIsSubmitted(true);
       setTimeout(() => setIsSubmitted(false), 2500);
+      navigate('/inventory/suppliers-list')
   } catch (error) {
       console.error("Error submitting form:", error);
       setError(error.response?.data?.message || "Failed to submit supplier information.");

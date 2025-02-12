@@ -6,6 +6,7 @@ import { MdEdit, MdDelete } from "react-icons/md";
 import { FiDelete } from "react-icons/fi";
 import "../../../src/App.css";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function SuppliersList() {
   const [suppliers, setSuppliers] = useState([]);
@@ -100,7 +101,7 @@ export default function SuppliersList() {
 
   const handleUpdateSupplier = async () => {
     try {
-      const response = await apiClient.put(`/inventory/suppliers/update`, editedSupplier);
+      const response = await apiClient.post(`/inventory/suppliers/update`, editedSupplier);
       setSuppliers(suppliers.map(s => (s.id === editedSupplier.id ? response.data.data : s)));
       setIsEditModalOpen(false);
     } catch (err) {
@@ -131,10 +132,18 @@ export default function SuppliersList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          Supplier List
+          Suppliers List
         </motion.h1>
         
-        <input
+        <div className="flex justify-end mb-4">
+          <Link 
+            to="/inventory/suppliers"
+            className="bg-red-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-transform transform hover:scale-105"
+          >
+            Add New Supplier
+          </Link>
+        </div>  
+      <input
           type="text"
           className="w-full mb-4 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           placeholder="Search suppliers by name..."
