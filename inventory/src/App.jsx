@@ -24,6 +24,7 @@ function App() {
           <Route path="equipment-type-form" element={<EquipmentTypeForm />} />
           <Route path="equipment-movement-form" element={<EquipmentMovementForm />} />
           <Route path="procurement-form" element={<ProcurementForm />} />
+          <Route path="moveement-form" element={<EquipmentMovementForm/>} />
 
           
         </Route>

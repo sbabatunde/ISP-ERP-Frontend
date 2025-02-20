@@ -66,56 +66,55 @@ export default function SuppliersForm() {
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         {success && <p className="text-green-500 text-sm text-center">{success}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+          <div  className="grid grid-cols-2 gap-4">
+            {/* <label className="block text-sm font-medium text-gray-700">Name</label> */}
             <input 
               type="text" 
               name="name" 
               value={formData.name} 
+              placeholder="Name"
               onChange={handleChange} 
               required
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Contact Name</label>
             <input 
               type="text" 
               name="contact_name" 
               value={formData.contact_name} 
               onChange={handleChange} 
+              placeholder="Contact Name"
               required
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
             <input 
               type="email" 
               name="contact_email" 
               value={formData.contact_email} 
+              placeholder="Email"
               onChange={handleChange} 
               required
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Contact Phone</label>
             <input 
               type="tel" 
               name="contact_phone" 
               value={formData.contact_phone} 
+              placeholder="Contact Phone"
               onChange={handleChange} 
               required
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Address</label>
             <textarea 
               name="address" 
               value={formData.address} 
               onChange={handleChange} 
+              placeholder="Address"
               required
               className="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200 focus:border-blue-400"
             ></textarea>
@@ -144,7 +143,7 @@ export default function SuppliersForm() {
           </div>
           <button
             type="submit"
-            className={`relative flex justify-center items-center gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
               isSubmitting || isSubmitted ? "registering" : ""
             }`}
           >

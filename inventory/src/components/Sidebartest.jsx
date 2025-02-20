@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import syslogo from '../assets/syslogo.jpg';
-import sys from '../assets/sys.png'
-import { MdDashboard, MdOutlineInventory, MdTableRows, MdMenu, MdOutlineCancel } from 'react-icons/md';
+import sys from '../assets/sys.png';
+import { MdDashboard, MdOutlineInventory, MdTableRows, MdMenu } from 'react-icons/md';
+import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import { RiInboxArchiveFill } from 'react-icons/ri';
 import { FaSearch } from 'react-icons/fa';
 import { IoSettings } from 'react-icons/io5';
@@ -24,21 +25,15 @@ const Sidebartest = ({ open, toggleSidebar }) => {
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 left-0 h-full bg-pink-600 text-white transform ${
+                className={`fixed top-0 left-0 h-full bg-pink-600 text-white overflow-y-auto transform ${
                     open ? "translate-x-0" : "-translate-x-full"
                 } transition-transform duration-300 w-72 shadow-lg`}
             >
-                {/* Close Button */}
-                <MdOutlineCancel
-                    className="absolute top-4 right-4 text-2xl cursor-pointer"
-                    onClick={toggleSidebar}
-                />
-
                 {/* Logo */}
                 <div className="flex items-center p-5 gap-x-4">
                     <img 
                         src={sys} 
-                        className="cursor-pointer w-10 h-10 duration-500 bg-white w-20"
+                        className="cursor-pointer h-10 duration-500 bg-white w-20"
                         alt="Logo"
                     />
                 </div>
@@ -67,7 +62,7 @@ const Sidebartest = ({ open, toggleSidebar }) => {
                             <MdOutlineInventory />
                             <span>Suppliers</span>
                         </div>
-                        <span>{supplierDropdownOpen ? <FiChevronsUp /> : <LuChevronsDown />}</span>
+                        <span>{supplierDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
                     </li>
 
                     {/* Dropdown Menu */}
@@ -91,7 +86,7 @@ const Sidebartest = ({ open, toggleSidebar }) => {
                             <MdProductionQuantityLimits />
                             <span>Equipment Procurement</span>
                         </div>
-                        <span>{equipmentForm ? <FiChevronsUp /> : <LuChevronsDown />}</span>
+                        <span>{equipmentForm ? <FaChevronUp /> : <FaChevronDown />}</span>
                     </li>
 
                     {equipmentForm && (
@@ -107,6 +102,9 @@ const Sidebartest = ({ open, toggleSidebar }) => {
                             </li>
                             <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
                                 <Link to="/procurement-form">Procurement Form</Link>
+                            </li>
+                            <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
+                                <Link to="/movement-form">Movement Form</Link>
                             </li>
                         </ul>
                     )}
