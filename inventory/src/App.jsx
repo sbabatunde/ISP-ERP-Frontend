@@ -10,6 +10,7 @@ import EquipmentProcurementForm from "./pages/Equipment-procurement/EquipmentPro
 import EquipmentMovementForm from "./pages/Equipment-procurement/EquipmentMovementForm";
 import EquipmentTypeForm from "./pages/Equipment-procurement/EquipmentTypeForm";
 import ProcurementForm from "./pages/Equipment-procurement/ProcurementForm";
+import Equipment from "./pages/Equipment-procurement/Equipment"
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="equipment-movement-form" element={<EquipmentMovementForm />} />
           <Route path="procurement-form" element={<ProcurementForm />} />
           <Route path="moveement-form" element={<EquipmentMovementForm/>} />
+          <Route path="equipment" element={<Equipment/>} />
 
           
         </Route>

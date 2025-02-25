@@ -30,10 +30,9 @@ export default function EquipmentProcurementForm() {
   useEffect(() => {
     const fetchEquipmentTypes = async () => {
       try {
-        const response = await apiClient.get("/inventory/equipment-type/list");
+        const response = await apiClient.get("/inventory/equipment/list");
         if (response.data && response.data.type) {
           setEquipmentTypes(response.data.type);
-          console.log(response.data)
         }
       } catch (err) {
         setError("Failed to fetch equipment types.");

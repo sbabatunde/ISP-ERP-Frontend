@@ -104,7 +104,7 @@ const Sidebartest = ({ open, toggleSidebar }) => {
                                 <Link to="/procurement-form">Procurement Form</Link>
                             </li>
                             <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
-                                <Link to="/movement-form">Movement Form</Link>
+                                <Link to="/equipment">Equipment Form</Link>
                             </li>
                         </ul>
                     )}
