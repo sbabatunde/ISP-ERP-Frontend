@@ -30,13 +30,12 @@ export default function EquipmentProcurementForm() {
   useEffect(() => {
     const fetchEquipmentTypes = async () => {
       try {
-        const response = await apiClient.get("/inventory/equipment-type/list");
-        if (response.data && response.data.type) {
-          setEquipmentTypes(response.data.type);
-        }
+        const response = await apiClient.get("/inventory/equipment");
+        const data = response.data?.data || [];
+        setEquipmentTypes(data);
       } catch (err) {
-        setError("Failed to fetch equipment types.");
-      }
+        setError(err.response?.data?.message || "Failed to fetch Equipment.");
+      } 
     };
 
     const fetchSuppliers = async () => {
@@ -119,7 +118,7 @@ export default function EquipmentProcurementForm() {
     setSuccess(null);
 
     try {
-      await apiClient.post("/inventory/procurements/", formData);
+      await apiClient.post("/inventory/procurements", formData);
       setSuccess("Equipment added successfully!");
       setFormData({
         supplier_id: "",
