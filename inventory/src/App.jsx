@@ -23,7 +23,7 @@ function App() {
           <Route path="equipment-form" element={<EquipmentForm />} />
           <Route path="equipment-list" element={<EquipmentList />} />
           <Route path="equipment-type-form" element={<EquipmentTypeForm />} />
-          <Route path="equipment-movement-form" element={<EquipmentMovementForm />} />
+          <Route path="movement-form" element={<EquipmentMovementForm />} />
           <Route path="procurement-form" element={<ProcurementForm />} />
           <Route path="moveement-form" element={<EquipmentMovementForm/>} />
           <Route path="equipment" element={<Equipment/>} />

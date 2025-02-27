@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from '../../api/axios';
 
 const EquipmentMovementForm = () => {
     const [formData, setFormData] = useState({
@@ -28,7 +28,7 @@ const EquipmentMovementForm = () => {
     // Fetch Locations (POP, Customer, Store)
     const fetchLocations = async () => {
         try {
-            const response = await axios.get("/api/locations");
+            const response = await apiClient.get("/api/locations");
             setLocations(response.data);
         } catch (error) {
             console.error("Error fetching locations", error);
@@ -38,7 +38,7 @@ const EquipmentMovementForm = () => {
     // Fetch Equipment Items (Available in store)
     const fetchEquipmentItems = async () => {
         try {
-            const response = await axios.get("/api/equipment-items");
+            const response = await apiClient.get("/api/equipment-items");
             setEquipmentItems(response.data);
         } catch (error) {
             console.error("Error fetching equipment items", error);
@@ -48,7 +48,7 @@ const EquipmentMovementForm = () => {
     // Fetch Users (For moved_by & handled_by)
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("/api/users");
+            const response = await apiClient.get("/api/users");
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users", error);
@@ -92,91 +92,124 @@ const EquipmentMovementForm = () => {
     };
 
     return (
-        <div className="container">
-            <h2>Record Equipment Movement</h2>
-            <form onSubmit={handleSubmit}>
-                {/* From Location */}
-                <label>From Location Type:</label>
-                <select name="from_location_type" value={formData.from_location_type} onChange={handleChange} required>
-                    <option value="">Select Type</option>
-                    <option value="store">Store</option>
-                    <option value="POP">POP</option>
-                    <option value="Customer">Customer</option>
-                </select>
-
-                <label>From Location:</label>
-                <select name="from_location_id" value={formData.from_location_id} onChange={handleChange} required>
-                    <option value="">Select Location</option>
-                    {locations.map(location => (
-                        <option key={location.id} value={location.id}>{location.name}</option>
-                    ))}
-                </select>
-
-                {/* To Location */}
-                <label>To Location Type:</label>
-                <select name="to_location_type" value={formData.to_location_type} onChange={handleChange} required>
-                    <option value="">Select Type</option>
-                    <option value="store">Store</option>
-                    <option value="POP">POP</option>
-                    <option value="Customer">Customer</option>
-                </select>
-
-                <label>To Location:</label>
-                <select name="to_location_id" value={formData.to_location_id} onChange={handleChange} required>
-                    <option value="">Select Location</option>
-                    {locations.map(location => (
-                        <option key={location.id} value={location.id}>{location.name}</option>
-                    ))}
-                </select>
-
-                {/* Movement Type */}
-                <label>Movement Type:</label>
-                <select name="movement_type" value={formData.movement_type} onChange={handleChange} required>
-                    <option value="">Select Type</option>
-                    <option value="installation">Installation</option>
-                    <option value="retrieval">Retrieval</option>
-                    <option value="swap">Swap</option>
-                </select>
-
-                {/* Movement Date */}
-                <label>Movement Date:</label>
-                <input type="date" name="movement_date" value={formData.movement_date} onChange={handleChange} required />
-
-                {/* Equipment Items (Multiple Selection) */}
-                <label>Equipment Items:</label>
-                <select name="equipment_item_ids" multiple onChange={handleEquipmentSelection} required>
-                    {equipmentItems.map(item => (
-                        <option key={item.id} value={item.id}>{item.serial_number} - {item.equipment.name}</option>
-                    ))}
-                </select>
-
-                {/* Logistics Cost */}
-                <label>Logistics Cost:</label>
-                <input type="number" name="logistics_cost" value={formData.logistics_cost} onChange={handleChange} required />
-
-                {/* Moved By */}
-                <label>Moved By:</label>
-                <select name="moved_by" value={formData.moved_by} onChange={handleChange} required>
-                    <option value="">Select User</option>
-                    {users.map(user => (
-                        <option key={user.id} value={user.id}>{user.name}</option>
-                    ))}
-                </select>
-
-                {/* Handled By */}
-                <label>Handled By:</label>
-                <select name="handled_by" value={formData.handled_by} onChange={handleChange} required>
-                    <option value="">Select User</option>
-                    {users.map(user => (
-                        <option key={user.id} value={user.id}>{user.name}</option>
-                    ))}
-                </select>
-
-                {/* Submit Button */}
-                <button type="submit">Submit Movement</button>
-            </form>
-        </div>
-    );
-};
+        
+            <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+                <h2 className="text-2xl font-bold mb-6 text-center">Record Equipment Movement</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* From Location */}
+                    <div>
+                        <label className="block font-medium">From Location Type:</label>
+                        <select name="from_location_type" value={formData.from_location_type} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md">
+                            <option value="">Select Type</option>
+                            <option value="store">Store</option>
+                            <option value="POP">POP</option>
+                            <option value="Customer">Customer</option>
+                        </select>
+                    </div>
+    
+                    <div>
+                        <label className="block font-medium">From Location:</label>
+                        <select name="from_location_id" value={formData.from_location_id} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md">
+                            <option value="">Select Location</option>
+                            {locations.map(location => (
+                                <option key={location.id} value={location.id}>{location.name}</option>
+                            ))}
+                        </select>
+                    </div>
+    
+                    {/* To Location */}
+                    <div>
+                        <label className="block font-medium">To Location Type:</label>
+                        <select name="to_location_type" value={formData.to_location_type} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md">
+                            <option value="">Select Type</option>
+                            <option value="store">Store</option>
+                            <option value="POP">POP</option>
+                            <option value="Customer">Customer</option>
+                        </select>
+                    </div>
+    
+                    <div>
+                        <label className="block font-medium">To Location:</label>
+                        <select name="to_location_id" value={formData.to_location_id} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md">
+                            <option value="">Select Location</option>
+                            {locations.map(location => (
+                                <option key={location.id} value={location.id}>{location.name}</option>
+                            ))}
+                        </select>
+                    </div>
+    
+                    {/* Movement Type */}
+                    <div>
+                        <label className="block font-medium">Movement Type:</label>
+                        <select name="movement_type" value={formData.movement_type} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md">
+                            <option value="">Select Type</option>
+                            <option value="installation">Installation</option>
+                            <option value="retrieval">Retrieval</option>
+                            <option value="swap">Swap</option>
+                        </select>
+                    </div>
+    
+                    {/* Movement Date */}
+                    <div>
+                        <label className="block font-medium">Movement Date:</label>
+                        <input type="date" name="movement_date" value={formData.movement_date} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md" />
+                    </div>
+    
+                    {/* Equipment Items */}
+                    <div>
+                        <label className="block font-medium">Equipment Items:</label>
+                        <select name="equipment_item_ids" multiple onChange={handleEquipmentSelection} required
+                            className="w-full p-2 border rounded-md">
+                            {equipmentItems.map(item => (
+                                <option key={item.id} value={item.id}>{item.serial_number} - {item.equipment.name}</option>
+                            ))}
+                        </select>
+                    </div>
+    
+                    {/* Logistics Cost */}
+                    <div>
+                        <label className="block font-medium">Logistics Cost:</label>
+                        <input type="number" name="logistics_cost" value={formData.logistics_cost} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md" />
+                    </div>
+    
+                    {/* Moved By */}
+                    <div>
+                        <label className="block font-medium">Moved By:</label>
+                        <select name="moved_by" value={formData.moved_by} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md">
+                            <option value="">Select User</option>
+                            {users.map(user => (
+                                <option key={user.id} value={user.id}>{user.name}</option>
+                            ))}
+                        </select>
+                    </div>
+    
+                    {/* Handled By */}
+                    <div>
+                        <label className="block font-medium">Handled By:</label>
+                        <select name="handled_by" value={formData.handled_by} onChange={handleChange} required
+                            className="w-full p-2 border rounded-md">
+                            <option value="">Select User</option>
+                            {users.map(user => (
+                                <option key={user.id} value={user.id}>{user.name}</option>
+                            ))}
+                        </select>
+                    </div>
+    
+                    {/* Submit Button */}
+                    <div className="text-center">
+                        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700">Submit Movement</button>
+                    </div>
+                </form>
+            </div>
+        )
+    };
 
 export default EquipmentMovementForm;

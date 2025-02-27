@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import syslogo from '../assets/syslogo.jpg';
 import sys from '../assets/sys.png';
 import { MdDashboard, MdOutlineInventory, MdTableRows, MdMenu } from 'react-icons/md';
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
@@ -8,8 +7,6 @@ import { FaSearch } from 'react-icons/fa';
 import { IoSettings } from 'react-icons/io5';
 import { MdProductionQuantityLimits } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { FiChevronsUp } from "react-icons/fi";
-import { LuChevronsDown } from "react-icons/lu";
 
 const Sidebartest = ({ open, toggleSidebar }) => {
     const [supplierDropdownOpen, setSupplierDropdownOpen] = useState(false);
@@ -101,7 +98,7 @@ const Sidebartest = ({ open, toggleSidebar }) => {
                                 <Link to="/equipment-type-form">Equipment Type Form</Link>
                             </li>
                             <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
-                                <Link to="/procurement-form">Procurement Form</Link>
+                                <Link to="/movement-form">Movement Form</Link>
                             </li>
                             <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
                                 <Link to="/equipment">Equipment Form</Link>
