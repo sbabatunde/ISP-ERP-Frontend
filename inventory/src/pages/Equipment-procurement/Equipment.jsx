@@ -13,6 +13,9 @@ const EquipmentForm = () => {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
   const [equipmentTypes, setEquipmentTypes] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
 
   // Animation variants for the container and form elements
   const containerVariants = {
@@ -118,13 +121,11 @@ const EquipmentForm = () => {
 
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-6">
           <motion.div variants={itemVariants}>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
             <input
               type="text"
               name="name"
               id="name"
+              placeholder="Name"
               value={formData.name}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -135,13 +136,11 @@ const EquipmentForm = () => {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <label htmlFor="model" className="block text-sm font-medium text-gray-700">
-              Model
-            </label>
             <input
               type="text"
               name="model"
               id="model"
+              placeholder="Model"
               value={formData.model}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -152,14 +151,12 @@ const EquipmentForm = () => {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <label htmlFor="unit_cost" className="block text-sm font-medium text-gray-700">
-              Unit Cost
-            </label>
             <input
               type="number"
               step="0.01"
               name="unit_cost"
               id="unit_cost"
+              placeholder="Unit Cost"
               value={formData.unit_cost}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -170,9 +167,6 @@ const EquipmentForm = () => {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <label htmlFor="equipment_type_id" className="block text-sm font-medium text-gray-700">
-              Equipment Type
-            </label>
             <select
               name="equipment_type_id"
               id="equipment_type_id"
@@ -210,12 +204,19 @@ const EquipmentForm = () => {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <button
-              type="submit"
-              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200"
-            >
-              Submit
-            </button>
+          <button
+            type="submit"
+            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+              isSubmitting || isSubmitted ? "registering" : ""
+            }`}
+          >
+            <span className={`text-2xl transition-transform duration-[2s] ${isSubmitting ? "translate-x-[-250px]" : isSubmitted ? "translate-x-[34px]" : ""}`}>
+              {isSubmitted ? "✔" : "📩"}
+            </span>
+            <span className={`text-lg font-semibold transition-transform duration-[2s] ${isSubmitting ? "translate-x-[300px]" : isSubmitted ? "translate-x-[34px]" : "translate-x-0"}`}>
+              {isSubmitting ? "Submitting..." : isSubmitted ? "Submitted Successfully" : "Submit"}
+            </span>
+          </button>
           </motion.div>
         </form>
       </motion.div>

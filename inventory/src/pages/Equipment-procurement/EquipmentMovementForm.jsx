@@ -18,6 +18,9 @@ const EquipmentMovementForm = () => {
     const [locations, setLocations] = useState([]);
     const [equipmentItems, setEquipmentItems] = useState([]);
     const [users, setUsers] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+  
 
     useEffect(() => {
         fetchLocations();
@@ -205,7 +208,19 @@ const EquipmentMovementForm = () => {
     
                     {/* Submit Button */}
                     <div className="text-center">
-                        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700">Submit Movement</button>
+                    <button
+            type="submit"
+            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+              isSubmitting || isSubmitted ? "registering" : ""
+            }`}
+          >
+            <span className={`text-2xl transition-transform duration-[2s] ${isSubmitting ? "translate-x-[-250px]" : isSubmitted ? "translate-x-[34px]" : ""}`}>
+              {isSubmitted ? "✔" : "📩"}
+            </span>
+            <span className={`text-lg font-semibold transition-transform duration-[2s] ${isSubmitting ? "translate-x-[300px]" : isSubmitted ? "translate-x-[34px]" : "translate-x-0"}`}>
+              {isSubmitting ? "Submitting..." : isSubmitted ? "Submitted Successfully" : "Submit"}
+            </span>
+          </button>
                     </div>
                 </form>
             </div>

@@ -73,7 +73,7 @@ export default function EquipmentTypeForm() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition"
+            className="w-full bg-pink-500 text-white p-3 rounded-lg hover:bg-blue-600 transition"
           >
             Submit
           </button>

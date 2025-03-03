@@ -91,9 +91,9 @@ const Sidebartest = ({ open, toggleSidebar }) => {
                             <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
                                 <Link to="/equipment-form">Equipment Procurement Form</Link>
                             </li>
-                            <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
+                            {/* <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
                                 <Link to="/equipment-list">Equipment Procurement List</Link>
-                            </li>
+                            </li> */}
                             <li className="text-white text-sm p-2 cursor-pointer hover:bg-gray-700 rounded-md">
                                 <Link to="/equipment-type-form">Equipment Type Form</Link>
                             </li>

@@ -26,6 +26,9 @@ export default function EquipmentProcurementForm() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
 
   useEffect(() => {
     const fetchEquipmentTypes = async () => {
@@ -116,6 +119,10 @@ export default function EquipmentProcurementForm() {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setIsSubmitting(true);
+    setIsSubmitted(false);
+    
+
 
     try {
       await apiClient.post("/inventory/procurements", formData);
@@ -201,7 +208,7 @@ export default function EquipmentProcurementForm() {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="bg-blue-500 text-white p-2 rounded-lg"
+              className="bg-pink-500 text-white p-2 rounded-lg"
             >
               Add Equipment Details
             </button>
@@ -216,9 +223,16 @@ export default function EquipmentProcurementForm() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-lg"
+            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+              isSubmitting || isSubmitted ? "registering" : ""
+            }`}
           >
-            Submit
+            <span className={`text-2xl transition-transform duration-[2s] ${isSubmitting ? "translate-x-[-250px]" : isSubmitted ? "translate-x-[34px]" : ""}`}>
+              {isSubmitted ? "✔" : "📩"}
+            </span>
+            <span className={`text-lg font-semibold transition-transform duration-[2s] ${isSubmitting ? "translate-x-[300px]" : isSubmitted ? "translate-x-[34px]" : "translate-x-0"}`}>
+              {isSubmitting ? "Submitting..." : isSubmitted ? "Submitted Successfully" : "Submit"}
+            </span>
           </button>
         </form>
       </div>
@@ -297,7 +311,7 @@ export default function EquipmentProcurementForm() {
               </button>
               <button
                 onClick={addEquipment}
-                className="bg-blue-500 text-white p-2 rounded-lg"
+                className="bg-pink-500 text-white p-2 rounded-lg"
               >
                 Add Equipment
               </button>
