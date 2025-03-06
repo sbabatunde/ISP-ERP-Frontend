@@ -1,4 +1,4 @@
-import { CiHome } from "react-icons/ci";
+import { ChartColumn, Home, NotepadText, Package, PackagePlus, Settings, ShoppingBag, UserCheck, UserPlus, Users } from "lucide-react";
 
 export const navbarLinks = [
     {
@@ -7,15 +7,17 @@ export const navbarLinks = [
             {
                 label:"Dashboard",
                 path: "/",
-                icon: <CiHome />
+                icon: Home
             },
             {
                 label: "Analytics",
-                path: "/analytics"
+                path: "/analytics",
+                icon: ChartColumn,
             },
             {
                 label:"Reports",
-                path:"/reports"
+                path:"/reports",
+                icon: NotepadText,
             }
         ],
     },
@@ -24,11 +26,28 @@ export const navbarLinks = [
         links: [
             {
                 label:"Suppliers Form",
-                path: "/inventory/supplier"
+                path: "/supplier",
+                icon: Users,
             },
             {
                 label: "Suppliers List",
-                path: "/inventory/suppliers-list"
+                path: "/suppliers-list",
+                icon: UserCheck,
+            }
+        ]
+    },
+    {
+        title: "Equipment",
+        links: [
+            {
+                label:"Equipment Form",
+                path: "/equipment-form",
+                icon: Users,
+            },
+            {
+                label: "Suppliers List",
+                path: "/suppliers-list",
+                icon: UserCheck,
             }
         ]
     },
@@ -37,7 +56,8 @@ export const navbarLinks = [
         links:[
             {
                 label: "settings",
-                path: "/settings"
+                path: "/settings",
+                icon: Settings,
             }
         ]
     }

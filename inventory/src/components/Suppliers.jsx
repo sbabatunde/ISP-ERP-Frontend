@@ -60,9 +60,9 @@ export default function SuppliersForm() {
 //   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center  bg-gradient-to-r from-pink-500 to-pink-200 p-4">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Supplier Registration</h2>
+    <div className="min-h-screen flex items-center justify-center   p-4">
+      <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
+        <h2 className="text-2xl font-semibold text-white mb-4 text-center">Supplier Registration</h2>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         {success && <p className="text-green-500 text-sm text-center">{success}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -143,7 +143,7 @@ export default function SuppliersForm() {
           </div>
           <button
             type="submit"
-            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-slate-500 hover:bg-slate-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
               isSubmitting || isSubmitted ? "registering" : ""
             }`}
           >

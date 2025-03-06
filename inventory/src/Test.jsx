@@ -3,6 +3,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {ThemeProvider} from "./contexts/theme-context"
 
 import Layout from "./routes/Layout"
+import DashboardPage from "./routes/dashboard/page";
+import SuppliersForm from "./components/Suppliers";
+import SuppliersList from "./pages/suppliers/SuppliersList"
+import EquipmentForm from "./pages/Equipment-procurement/Equipment";
 
 export default function Test () {
     const router = createBrowserRouter([
@@ -12,7 +16,7 @@ export default function Test () {
             children: [
                 {
                     index:true,
-                    // element: <Dashboard/>
+                    element: <DashboardPage />,
                 },
                 {
                     path: "analytics",
@@ -27,8 +31,16 @@ export default function Test () {
                     element:<h1 className="title">Customers</h1>
                 },
                 {
-                    path: "inventory",
-                    element:<h1 className="title">Inventory</h1>
+                    path: "supplier",
+                    element:<SuppliersForm/>
+                },
+                {
+                    path: "suppliers-list",
+                    element:<SuppliersList/>
+                },
+                {
+                    path: "equipment-form",
+                    element:<EquipmentForm/>
                 },
             ],
         },
