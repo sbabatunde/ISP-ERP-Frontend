@@ -91,13 +91,13 @@ const EquipmentForm = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 to-pink-500 p-4"
+      className="min-h-screen flex items-center justify-center p-4"
     >
       <motion.div
         variants={itemVariants}
-        className="bg-white shadow-2xl rounded-lg p-8 max-w-3xl w-full"
+        className="bg-slate-900 shadow-2xl rounded-lg p-8 max-w-3xl w-full"
       >
-        <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+        <h1 className="text-3xl font-bold text-white mb-6 text-center">
           Add Equipment
         </h1>
 
@@ -128,7 +128,7 @@ const EquipmentForm = () => {
               placeholder="Name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full rounded-md border border-white p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
             {errors.name && (
               <p className="mt-1 text-red-600 text-sm">{errors.name[0]}</p>
@@ -143,7 +143,7 @@ const EquipmentForm = () => {
               placeholder="Model"
               value={formData.model}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 text-white block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
             {errors.model && (
               <p className="mt-1 text-red-600 text-sm">{errors.model[0]}</p>
@@ -159,7 +159,7 @@ const EquipmentForm = () => {
               placeholder="Unit Cost"
               value={formData.unit_cost}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full rounded-md border border-white p-2 shadow-sm focus:ring-indigo-500 focus:border-blue-500"
             />
             {errors.unit_cost && (
               <p className="mt-1 text-red-600 text-sm">{errors.unit_cost[0]}</p>
@@ -206,7 +206,7 @@ const EquipmentForm = () => {
           <motion.div variants={itemVariants}>
           <button
             type="submit"
-            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-slate-500 hover:bg-slate-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
               isSubmitting || isSubmitted ? "registering" : ""
             }`}
           >
