@@ -140,9 +140,9 @@ export default function EquipmentProcurementForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 to-pink-200 p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-2xl">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+    <div className="min-h-screen flex items-center justify-center p-4 text-white">
+      <div className="bg-slate-900 p-8 rounded-2xl shadow-md w-full max-w-2xl">
+        <h2 className="text-2xl font-semibold text-white mb-4 text-center">
           Procurement
         </h2>
         {error && (
@@ -153,13 +153,13 @@ export default function EquipmentProcurementForm() {
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="block text-gray-700">Supplier</label>
+            <label className="block">Supplier</label>
             <select
               name="supplier_id"
               value={formData.supplier_id}
               onChange={handleChange}
               required
-              className="w-full border rounded-lg p-2"
+              className="w-full border bg-slate-600 rounded-lg p-2"
             >
               <option value="">Select Supplier</option>
               {suppliers.map((supplier) => (
@@ -171,7 +171,7 @@ export default function EquipmentProcurementForm() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700">Procurement Date</label>
+              <label className="block">Procurement Date</label>
               <input
                 type="date"
                 name="procurement_date"
@@ -182,7 +182,7 @@ export default function EquipmentProcurementForm() {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Logistics</label>
+              <label className="block">Logistics</label>
               <input
                 type="text"
                 name="logistics"
@@ -193,7 +193,7 @@ export default function EquipmentProcurementForm() {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Total Cost</label>
+              <label className="block">Total Cost</label>
               <input
                 type="number"
                 name="total_cost"
@@ -204,11 +204,11 @@ export default function EquipmentProcurementForm() {
             </div>
           </div>
           <div className="space-y-2">
-            <label className="block text-gray-700">Equipment</label>
+            <label className="block">Equipment</label>
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="bg-pink-500 text-white p-2 rounded-lg"
+              className="bg-slate-500 hover:bg-slate-600 text-white p-2 rounded-lg"
             >
               Add Equipment Details
             </button>
@@ -223,7 +223,7 @@ export default function EquipmentProcurementForm() {
           </div>
           <button
             type="submit"
-            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-pink-500 hover:bg-pink-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
+            className={`relative flex justify-center items-center cursor-pointer gap-3 h-14 w-full px-6 rounded-full text-white bg-slate-500 hover:bg-slate-600 font-semibold transition-all duration-500 ease-in-out overflow-hidden ${
               isSubmitting || isSubmitted ? "registering" : ""
             }`}
           >
@@ -239,7 +239,7 @@ export default function EquipmentProcurementForm() {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-slate-500 p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-lg font-semibold mb-4">Add Equipment Details</h3>
             <div className="space-y-4">
               <div>

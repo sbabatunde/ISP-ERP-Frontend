@@ -95,7 +95,7 @@ const EquipmentForm = () => {
     >
       <motion.div
         variants={itemVariants}
-        className="bg-slate-900 shadow-2xl rounded-lg p-8 max-w-3xl w-full"
+        className="bg-slate-900 shadow-2xl rounded-lg p-8 max-w-lg w-full"
       >
         <h1 className="text-3xl font-bold text-white mb-6 text-center">
           Add Equipment
@@ -128,7 +128,7 @@ const EquipmentForm = () => {
               placeholder="Name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-white p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full rounded-md border border-white p-2  focus:ring-indigo-500 focus:border-indigo-500 text-white"
             />
             {errors.name && (
               <p className="mt-1 text-red-600 text-sm">{errors.name[0]}</p>
@@ -143,7 +143,7 @@ const EquipmentForm = () => {
               placeholder="Model"
               value={formData.model}
               onChange={handleChange}
-              className="mt-1 text-white block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 text-white block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
             {errors.model && (
               <p className="mt-1 text-red-600 text-sm">{errors.model[0]}</p>
@@ -159,7 +159,7 @@ const EquipmentForm = () => {
               placeholder="Unit Cost"
               value={formData.unit_cost}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-white p-2 shadow-sm focus:ring-indigo-500 focus:border-blue-500"
+              className="mt-1 block w-full rounded-md border border-white p-2 text-white focus:ring-indigo-500 focus:border-blue-500"
             />
             {errors.unit_cost && (
               <p className="mt-1 text-red-600 text-sm">{errors.unit_cost[0]}</p>
@@ -172,7 +172,7 @@ const EquipmentForm = () => {
               id="equipment_type_id"
               value={formData.equipment_type_id}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="bg-slate-500 mt-1 block w-full rounded-md border border-gray-300 p-2 text-white focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value="">Select an equipment type</option>
               {equipmentTypes.map((type) => (
@@ -187,7 +187,7 @@ const EquipmentForm = () => {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <label htmlFor="images" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="images" className="block text-sm font-medium text-white cursor-pointer">
               Images
             </label>
             <input
@@ -196,7 +196,7 @@ const EquipmentForm = () => {
               id="images"
               multiple
               onChange={handleFileChange}
-              className="mt-1 block w-full text-gray-600"
+              className="mt-1 block w-full text-white"
             />
             {errors['images.*'] && (
               <p className="mt-1 text-red-600 text-sm">{errors['images.*'][0]}</p>

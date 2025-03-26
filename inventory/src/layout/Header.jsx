@@ -30,7 +30,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
             </div>
             <div className="flex items-center gap-x-3">
                 <button
-                    className="btn-ghost size-10"
+                    className="btn-ghost size-10 cursor-pointer"
                     onClick={() => setTheme(theme === "light" ? "dark" : "light")}
                 >
                     <Sun

@@ -45,8 +45,8 @@ export const navbarLinks = [
                 icon: Users,
             },
             {
-                label: "Suppliers List",
-                path: "/suppliers-list",
+                label: "Procurement Form",
+                path: "/procurement-form",
                 icon: UserCheck,
             }
         ]

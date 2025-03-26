@@ -120,7 +120,7 @@ export default function SuppliersForm() {
             ></textarea>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Social Media Links</label>
+            <label className="block text-sm font-medium text-white">Social Media Links</label>
             <input 
               type="text" 
               name="socials" 
@@ -131,7 +131,7 @@ export default function SuppliersForm() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">website</label>
+            <label className="block text-sm font-medium text-white">website</label>
             <input 
               type="text" 
               name="website" 
