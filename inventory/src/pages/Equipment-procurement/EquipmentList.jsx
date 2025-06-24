@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { fetchEquipmentList } from '../../api/axios';
 
 const EquipmentList = () => {
   const [equipmentData, setEquipmentData] = useState([]);
@@ -6,13 +7,9 @@ const EquipmentList = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchEquipmentData = async () => {
+    const getEquipmentData = async () => {
       try {
-        const response = await fetch('/api/equipment');
-        if (!response.ok) {
-          throw new Error('Failed to fetch equipment data');
-        }
-        const data = await response.json();
+        const data = await fetchEquipmentList();
         setEquipmentData(data);
       } catch (err) {
         setError(err.message);
@@ -21,7 +18,7 @@ const EquipmentList = () => {
       }
     };
 
-    fetchEquipmentData();
+    getEquipmentData();
   }, []);
 
   if (loading) return <div className="p-4">Loading...</div>;

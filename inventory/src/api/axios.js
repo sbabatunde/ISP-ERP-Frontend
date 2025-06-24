@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://10.0.0.253:8000/api', // Laravel API base URL
+    // baseURL: 'http://10.0.0.253:8000/api', // Laravel API base URL
+    baseURL: 'http://localhost:8000/api', // Laravel API base URL
     headers: {
         'Content-Type': 'application/json',
         // Accept: 'application/json',
@@ -24,5 +25,53 @@ const apiClient = axios.create({
 // }, (error) => {
 //     return Promise.reject(error);
 // });
+
+// Fetch equipment list
+export const fetchEquipmentList = async () => {
+    const response = await apiClient.get('/inventory/equipment');
+    return response.data?.data || [];
+};
+
+// Post equipment movement
+export const postEquipmentMovement = async (formData) => {
+    const response = await apiClient.post('/movements', formData);
+    return response.data;
+};
+
+// Fetch suppliers list
+export const fetchSuppliersList = async () => {
+    const response = await apiClient.get('/inventory/suppliers/list');
+    return response.data?.data || [];
+};
+
+// Create a new supplier
+export const createSupplier = async (formData) => {
+    const response = await apiClient.post('/inventory/suppliers/store', formData);
+    return response.data;
+};
+
+// Update a supplier
+export const updateSupplier = async (supplierData) => {
+    const response = await apiClient.post('/inventory/suppliers/update', supplierData);
+    return response.data;
+};
+
+// Create a new procurement
+export const createProcurement = async (formData) => {
+    const response = await apiClient.post('/inventory/procurements', formData);
+    return response.data;
+};
+
+// Fetch equipment types for equipment form
+export const fetchEquipmentTypes = async () => {
+    const response = await apiClient.get('/inventory/equipment-type/list');
+    return response.data?.type || [];
+};
+
+// Create a new equipment
+export const createEquipment = async (formData) => {
+    const response = await apiClient.post('/inventory/equipment', formData);
+    return response.data;
+};
 
 export default apiClient;

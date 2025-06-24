@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ProcurementForm = () => {
+const  = () => {
   const [formData, setFormData] = useState({
     firstname: "",
     surname: "",

@@ -5,8 +5,12 @@ import { MdOutlineDashboard } from "react-icons/md";
 import { navbarLinks } from "../constants";
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types"
+import { useTheme } from "../hooks/use-theme";
+import { Sun, Moon } from "lucide-react";
 
 export const Sidebar = forwardRef(({ collapsed }, ref) => {
+    const { theme, setTheme } = useTheme();
+    const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
     return (
         <aside
             ref={ref}
@@ -16,10 +20,18 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
                 collapsed ? "max-md:-left-full" : "max-md:left-0",
             )}
         >
-            <div className="flex gap-x-3 p-3">
-            <MdDashboard alt="Logoipsum" className="dark:hidden" />
-            <MdOutlineDashboard alt="Logoipsum" className="hidden dark:block" />
-                {!collapsed && <p className="text-lg font-medium text-slate-900 transition-colors dark:text-slate-50">Syscodes Inventory</p>}
+            <div className="flex gap-x-3 p-3 items-center justify-between">
+                <span className="flex items-center gap-x-3">
+                    {isDark ? <MdOutlineDashboard size={24} alt="Logoipsum" /> : <MdDashboard size={24} alt="Logoipsum" />}
+                    {!collapsed && <p className="text-lg font-medium text-slate-900 transition-colors dark:text-slate-50">Syscodes Inventory</p>}
+                </span>
+                <button
+                    className="btn-ghost size-8 flex items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition"
+                    onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                    title="Toggle theme"
+                >
+                    {isDark ? <Sun size={18} className="text-yellow-400" /> : <Moon size={18} className="text-slate-700" />}
+                </button>
             </div>
             <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
             {navbarLinks.map((navbarLink) => (
@@ -48,7 +60,7 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
           </nav>
         ))}
         </div>
-                </aside>
+        </aside>
     );
 });
 

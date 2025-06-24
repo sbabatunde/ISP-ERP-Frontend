@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import apiClient from '../../api/axios';
+import apiClient, { postEquipmentMovement } from '../../api/axios';
 
 const EquipmentMovementForm = () => {
     const [formData, setFormData] = useState({
@@ -74,7 +74,7 @@ const EquipmentMovementForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/movements", formData);
+            await postEquipmentMovement(formData);
             alert("Equipment movement recorded successfully!");
             setFormData({
                 from_location_type: "",
