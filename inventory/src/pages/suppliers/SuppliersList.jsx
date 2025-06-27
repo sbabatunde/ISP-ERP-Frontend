@@ -60,14 +60,14 @@ export default function SuppliersList() {
     setSelectedSupplier(null);
   };
 
-  if (loading) return <p className="text-center mt-6 animate-pulse">Loading...</p>;
+  if (loading) return <p className="text-center text-[30px] mt-[100px] animate-pulse">Loading...</p>;
   if (error) return <p className="text-center text-red-500 mt-6">{error}</p>;
 
   return (
     <div className="min-h-screen p-6">
       <div className="  bg-white dark:bg-slate-900 shadow-xl rounded-3xl p-8">
       
-        <h1 className="text-4xl font-extrabold text-center text-slate-800 dark:text-white mb-10">Suppliers Directory</h1>
+        <h1 className="text-4xl font-extrabold text-center dark:text-white text-slate-800 mb-10">Suppliers Directory</h1>
 
         <input
           type="text"
@@ -91,11 +91,9 @@ export default function SuppliersList() {
             <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
               {filteredSuppliers.length > 0 ? (
                 filteredSuppliers.map((supplier, idx) => (
-                  <tr key={supplier.id || idx} className="hover:bg-blue-50 dark:hover:bg-slate-800">
-                    <td className="px-4 py-4 font-semibold text-slate-800 dark:text-slate-100">{supplier.name}</td>
-                    <td className="px-4 py-4 text-slate-700 dark:text-slate-200">
-                      {/* suggestion to remove the contact name */}
-                      {supplier.contact_name}</td>
+                  <tr key={supplier.id || idx} className="hover:bg-pink-50 dark:hover:bg-slate-800">
+                    <td className="px-4 py-4 font-semibold text-slate-700 dark:text-slate-100">{supplier.name}</td>
+                    <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.contact_name}</td>
                     <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.contact_email}</td>
                     <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.contact_phone}</td>
                     <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.address || 'N/A'}</td>
@@ -126,22 +124,80 @@ export default function SuppliersList() {
 
         {/* View Modal */}
         {isModalOpen && selectedSupplier && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-6 w-full max-w-md shadow-lg relative">
-              <button onClick={closeModal} className="absolute top-4 right-4 text-xl text-slate-400 hover:text-red-500">
-                <FiDelete />
-              </button>
-              <h2 className="text-2xl font-bold text-center mb-4 text-slate-800 dark:text-white">Supplier Info</h2>
-              <ul className="space-y-2 text-slate-700 dark:text-slate-200">
-                <li><strong>Name:</strong> {selectedSupplier.name}</li>
-                <li><strong>Contact:</strong> {selectedSupplier.contact_name}</li>
-                <li><strong>Email:</strong> {selectedSupplier.contact_email}</li>
-                <li><strong>Phone:</strong> {selectedSupplier.contact_phone}</li>
-                <li><strong>Address:</strong> {selectedSupplier.address || 'N/A'}</li>
-                <li><strong>Website:</strong> {selectedSupplier.website || 'N/A'}</li>
-              </ul>
-            </div>
-          </motion.div>
+         <motion.div 
+         initial={{ opacity: 0 }} 
+         animate={{ opacity: 1 }} 
+         className="fixed inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+       >
+         <div className="bg-white dark:bg-slate-800 rounded-xl p-6 w-full max-w-md shadow-xl relative border border-slate-200 dark:border-slate-700">
+           <button 
+             onClick={closeModal} 
+             className="absolute top-5 right-5 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-500 dark:text-slate-400 hover:text-red-500"
+             aria-label="Close modal"
+           >
+             <FiDelete className="text-xl" />
+           </button>
+           
+           <div className="space-y-6">
+             <h2 className="text-2xl font-bold text-center text-slate-800 dark:text-white">
+               Supplier Details
+             </h2>
+             
+             <div className="space-y-4">
+               <div className="flex items-start">
+                 <span className="w-28 font-medium text-slate-500 dark:text-slate-400">Name:</span>
+                 <span className="flex-1 font-semibold text-slate-800 dark:text-slate-100">
+                   {selectedSupplier.name}
+                 </span>
+               </div>
+               
+               <div className="flex items-start">
+                 <span className="w-28 font-medium text-slate-500 dark:text-slate-400">Contact:</span>
+                 <span className="flex-1 text-slate-700 dark:text-slate-200">
+                   {selectedSupplier.contact_name}
+                 </span>
+               </div>
+               
+               <div className="flex items-start">
+                 <span className="w-28 font-medium text-slate-500 dark:text-slate-400">Email:</span>
+                 <span className="flex-1 text-slate-700 dark:text-slate-200">
+                   {selectedSupplier.contact_email}
+                 </span>
+               </div>
+               
+               <div className="flex items-start">
+                 <span className="w-28 font-medium text-slate-500 dark:text-slate-400">Phone:</span>
+                 <span className="flex-1 text-slate-700 dark:text-slate-200">
+                   {selectedSupplier.contact_phone}
+                 </span>
+               </div>
+               
+               <div className="flex items-start">
+                 <span className="w-28 font-medium text-slate-500 dark:text-slate-400">Address:</span>
+                 <span className="flex-1 text-slate-700 dark:text-slate-200">
+                   {selectedSupplier.address || 'N/A'}
+                 </span>
+               </div>
+               
+               <div className="flex items-start">
+                 <span className="w-28 font-medium text-slate-500 dark:text-slate-400">Website:</span>
+                 <span className="flex-1 text-slate-700 dark:text-slate-200">
+                   {selectedSupplier.website ? (
+                     <a 
+                       href={selectedSupplier.website} 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="text-blue-600 dark:text-blue-400 hover:underline"
+                     >
+                       {selectedSupplier.website}
+                     </a>
+                   ) : 'N/A'}
+                 </span>
+               </div>
+             </div>
+           </div>
+         </div>
+       </motion.div>
         )}
 
         {/* Edit Modal */}
@@ -151,19 +207,19 @@ export default function SuppliersList() {
               <button onClick={() => setIsEditModalOpen(false)} className="absolute top-4 right-4 text-xl text-slate-400 hover:text-red-500">
                 <FiDelete />
               </button>
-              <h2 className="text-2xl font-bold text-center mb-6 text-slate-800 dark:text-white">Edit Supplier</h2>
+              <h2 className="text-2xl font-bold text-center mb-6 dark:text-white text-slate-800">Edit Supplier</h2>
               <input
                 type="text"
                 value={editedSupplier?.name || ''}
                 onChange={(e) => setEditedSupplier({ ...editedSupplier, name: e.target.value })}
-                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Name"
               />
               <input
                 type="email"
                 value={editedSupplier?.contact_email || ''}
                 onChange={(e) => setEditedSupplier({ ...editedSupplier, contact_email: e.target.value })}
-                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Email"
               />
               <button

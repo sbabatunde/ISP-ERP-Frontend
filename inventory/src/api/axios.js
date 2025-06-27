@@ -74,4 +74,10 @@ export const createEquipment = async (formData) => {
     return response.data;
 };
 
+// Create a new equipment type
+export const createEquipmentType = async (formData) => {
+    const response = await apiClient.post('/inventory/equipment-type/store', formData);
+    return response.data;
+};
+
 export default apiClient;

@@ -8,17 +8,25 @@ import { useClickOutside } from "../hooks/use-clicks-outside";
 import {Sidebar} from "../layout/Sidebar"
 import {Header} from "../layout/Header"
 import {cn} from "../lib/cn"
+import { useLocation } from "react-router-dom";
+import { Footer } from "../layout/Footer";
+
 
 
 const Layout = () => {
+    const location = useLocation();
     const isDesktopDevice = useMediaQuery("(min-width: 768px)");
     const [collapsed, setCollapsed] = useState(!isDesktopDevice);
 
     const sidebarRef = useRef(null);
 
     useEffect(() => {
-        setCollapsed(!isDesktopDevice);
-    }, [isDesktopDevice]);
+        if(location.pathname.includes("suppliers")){
+            setCollapsed(true);
+        }else{
+            setCollapsed(!isDesktopDevice);
+        }
+    }, [isDesktopDevice, location.pathname]);
 
     useClickOutside([sidebarRef], () => {
         if (!isDesktopDevice && !collapsed) {
@@ -46,6 +54,7 @@ const Layout = () => {
                 <div className="h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden p-6">
                     <Outlet />
                 </div>
+            {/* <Footer/> */}
             </div>
         </div>
     );

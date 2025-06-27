@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createSupplier } from "../api/axios";
 
@@ -26,18 +26,33 @@ export default function SuppliersForm() {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    setIsSubmitting(true);
+  setIsSubmitting(true);
+
+  if(!formData.socials.length || !formData.name || !formData.contact_name || !formData.contact_email || !formData.contact_phone || !formData.address || !formData.website){
+    setError("All input required")
+    setIsSubmitting(false);
+    return
+  }
 
     try {
       await createSupplier(formData);
       setSuccess("Supplier created successfully!");
-      setTimeout(() => navigate("/inventory/suppliers-list"), 1500);
+      setTimeout(() => navigate("/suppliers-list"), 1500);
     } catch (error) {
       setError(error.response?.data?.message || "Submission failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if(success || error){
+      setTimeout(() => {
+        setSuccess(null);
+        setError(null);
+      }, 3000);
+    }
+  },[success, error])
 
   return (
     <div className="w-full min-h-screen py-4">
@@ -48,8 +63,8 @@ export default function SuppliersForm() {
           </svg>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-800 dark:text-white">New Supplier</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Add a new supplier </p>
+          <h1 className="text-xl font-semibold dark:text-white text-slate-800">Add New Supplier</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Add a new supplier</p>
         </div>
       </div>
 
@@ -195,7 +210,7 @@ export default function SuppliersForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`px-4 py-2 text-sm font-medium rounded-lg text-white bg-pink-600 hover:bg-pink-700 flex items-center justify-center gap-2 min-w-[120px] ${
+              className={`px-4 cursor-pointer py-2 text-sm font-medium rounded-lg text-white bg-pink-600 hover:bg-pink-700 flex items-center justify-center gap-2 min-w-[120px] ${
                 isSubmitting ? "opacity-75 cursor-not-allowed" : ""
               }`}
             >

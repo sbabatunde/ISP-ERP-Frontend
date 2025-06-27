@@ -19,8 +19,6 @@ export const Header = ({ collapsed, setCollapsed }) => {
                         size={20}
                         className="text-slate-300"
                     />
-                    {/* what is the purpose of this search input */}
-                   
                     <input
                         type="text"
                         name="search"

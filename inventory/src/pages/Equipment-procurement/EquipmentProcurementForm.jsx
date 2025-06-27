@@ -140,8 +140,8 @@ export default function EquipmentProcurementForm() {
           </svg>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-800 dark:text-white">New Equipment Procurement</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Add a new procurement record</p>
+          <h1 className="text-xl font-semibold  dark:text-white">New Equipment Procurement</h1>
+          <p className="text-sm text-slate-500 dark:text-white">Add a new procurement record</p>
         </div>
       </div>
 
@@ -157,35 +157,35 @@ export default function EquipmentProcurementForm() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm mb-2 text-slate-600 dark:text-slate-400">Supplier*</label>
+                <label className="block text-sm mb-2 text-slate-600 dark:text-white">Supplier*</label>
                 <select
                   name="supplier_id"
                   value={formData.supplier_id}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border dark:text-white border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 >
                   <option value="">Select Supplier</option>
                   {suppliers.map((supplier) => (
-                    <option key={supplier.id} value={supplier.id}>
-                      {supplier.name}
+                      <option  key={supplier.id} value={supplier.id}>
+                        {supplier.name}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm mb-2 text-slate-600 dark:text-slate-400">Procurement Date*</label>
+                <label className="block text-sm mb-2 text-slate-600 dark:text-white">Procurement Date*</label>
                 <input
                   type="date"
                   name="procurement_date"
                   value={formData.procurement_date}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm dark:text-white rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm mb-2 text-slate-600 dark:text-slate-400">Logistics*</label>
+                <label className="block text-sm mb-2 text-slate-600 dark:text-white">Logistics*</label>
                 <input
                   type="text"
                   name="logistics"
@@ -196,9 +196,9 @@ export default function EquipmentProcurementForm() {
                 />
               </div>
               <div>
-                <label className="block text-sm mb-2 text-slate-600 dark:text-slate-400">Total Cost</label>
+                <label className="block text-sm mb-2 text-slate-600 dark:text-white">Total Cost</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">₦</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-white">₦</span>
                   <input
                     type="number"
                     name="total_cost"
@@ -263,7 +263,7 @@ export default function EquipmentProcurementForm() {
               </div>
             ) : (
               <div className="text-center py-6 bg-gray-50 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-                <p className="text-gray-500 dark:text-gray-400">No equipment added yet</p>
+                <p className="text-gray-500 dark:text-white">No equipment added yet</p>
               </div>
             )}
           </div>

@@ -8,6 +8,7 @@ import SuppliersForm from "./components/Suppliers";
 import SuppliersList from "./pages/suppliers/SuppliersList"
 import EquipmentForm from "./pages/Equipment-procurement/Equipment";
 import EquipmentProcurementForm from "./pages/Equipment-procurement/EquipmentProcurementForm"
+import EquipmentTypeForm from "./pages/Equipment-procurement/EquipmentTypeForm"
 
 export default function Test () {
     const router = createBrowserRouter([
@@ -51,6 +52,10 @@ export default function Test () {
                     path: "procurement-form",
                     element:<EquipmentProcurementForm/>
                 },
+                {
+                    path: "equipment-type-form",
+                    element:<EquipmentTypeForm/>
+                }
             ],
         },
     ])

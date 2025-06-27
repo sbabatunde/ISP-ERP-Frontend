@@ -1,23 +1,23 @@
-import { ChartColumn, Home, NotepadText, Package, PackagePlus, Settings, ShoppingBag, UserCheck, UserPlus, Users } from "lucide-react";
+import { Home, BarChart2, FileText, Users, ListChecks, PackagePlus, ShoppingBag, Package, Settings } from "lucide-react";
 
 export const navbarLinks = [
     {
         title: "Dashboard",
         links: [
             {
-                label:"Dashboard",
+                label: "Dashboard",
                 path: "/",
                 icon: Home
             },
             {
                 label: "Analytics",
                 path: "/analytics",
-                icon: ChartColumn,
+                icon: BarChart2,
             },
             {
-                label:"Reports",
-                path:"/reports",
-                icon: NotepadText,
+                label: "Reports",
+                path: "/reports",
+                icon: FileText,
             }
         ],
     },
@@ -25,14 +25,14 @@ export const navbarLinks = [
         title: "Suppliers",
         links: [
             {
-                label:"Suppliers Form",
+                label: "Suppliers Form",
                 path: "/supplier",
                 icon: Users,
             },
             {
                 label: "Suppliers List",
                 path: "/suppliers-list",
-                icon: UserCheck,
+                icon: ListChecks,
             }
         ]
     },
@@ -40,14 +40,19 @@ export const navbarLinks = [
         title: "Equipment",
         links: [
             {
-                label:"Equipment Form",
+                label: "Equipment Form",
                 path: "/equipment-form",
-                icon: Users,
+                icon: PackagePlus,
             },
             {
                 label: "Procurement Form",
                 path: "/procurement-form",
-                icon: UserCheck,
+                icon: ShoppingBag,
+            },
+            {
+                label: "Equipment Type Form",
+                path: "/equipment-type-form",
+                icon: Package,
             }
         ]
     },

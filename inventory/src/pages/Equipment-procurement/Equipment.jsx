@@ -99,7 +99,7 @@ export default function EquipmentForm() {
           </svg>
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-slate-800 dark:text-white">Add New Equipment</h1>
+          <h1 className="text-xl font-semibold dark:text-white">Add New Equipment</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">Fill in the equipment details</p>
         </div>
       </div>
