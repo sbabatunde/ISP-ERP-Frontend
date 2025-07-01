@@ -163,7 +163,7 @@ export default function EquipmentProcurementForm() {
                   value={formData.supplier_id}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border dark:text-white border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
                 >
                   <option value="">Select Supplier</option>
                   {suppliers.map((supplier) => (
@@ -181,7 +181,7 @@ export default function EquipmentProcurementForm() {
                   value={formData.procurement_date}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm dark:text-white rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -192,7 +192,7 @@ export default function EquipmentProcurementForm() {
                   value={formData.logistics}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
                 />
               </div>
               <div>
