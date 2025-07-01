@@ -24,7 +24,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
                         name="search"
                         id="search"
                         placeholder="Search..."
-                        className="w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300 dark:text-slate-50"
+                        className="w-full bg-transparent text-slate-900 dark:text-white outline-0 placeholder:text-slate-300 dark:placeholder:text-slate-400"
                     />
                 </div>
             </div>

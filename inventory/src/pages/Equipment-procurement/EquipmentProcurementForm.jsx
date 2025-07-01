@@ -25,9 +25,9 @@ export default function EquipmentProcurementForm() {
   const [suppliers, setSuppliers] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddEquipmentModal, setisAddEquipmentModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isEditEquipmentModal, setisEditEquipmentModal] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,7 +93,7 @@ export default function EquipmentProcurementForm() {
         unit: "",
         current_serial_number: "",
       });
-      setIsModalOpen(false);
+      setisAddEquipmentModal(false);
     } else {
       setError("Please fill in all equipment details");
     }
@@ -120,6 +120,7 @@ export default function EquipmentProcurementForm() {
       setIsSubmitting(false);
     }
   };
+  console.log(formData.equipment)
 
   useEffect(() => {
     if (success || error) {
@@ -130,6 +131,15 @@ export default function EquipmentProcurementForm() {
       return () => clearTimeout(timer);
     }
   }, [success, error]);
+
+  const handleDelete = (index) =>{
+    const updatedEquipment = formData.equipment.filter((_, i) => i !== index);
+    setFormData({
+      ...formData,
+      equipment: updatedEquipment,
+      total_cost: updatedEquipment.reduce((sum, equipment) => sum + Number(equipment.unit_cost), 0),
+    });
+  }
 
   return (
     <div className="w-full min-h-screen py-4">
@@ -163,7 +173,7 @@ export default function EquipmentProcurementForm() {
                   value={formData.supplier_id}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border dark:text-white border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
                 >
                   <option value="">Select Supplier</option>
                   {suppliers.map((supplier) => (
@@ -181,7 +191,7 @@ export default function EquipmentProcurementForm() {
                   value={formData.procurement_date}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm dark:text-white rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -192,7 +202,7 @@ export default function EquipmentProcurementForm() {
                   value={formData.logistics}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -223,7 +233,7 @@ export default function EquipmentProcurementForm() {
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Equipment</label>
               <button
                 type="button"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setisAddEquipmentModal(true)}
                 className="inline-flex items-center px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -240,6 +250,8 @@ export default function EquipmentProcurementForm() {
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Model</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Serials</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Unit Cost</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Action</th>
+                      
                     </tr>
                   </thead>
                   <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -251,11 +263,24 @@ export default function EquipmentProcurementForm() {
                             {item.serial_numbers.map((sn, i) => (
                               <span key={i} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
                                 {sn}
+                            
                               </span>
+                              
                             ))}
                           </div>
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">₦{item.unit_cost}</td>
+                               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                <div className="flex gap-3 items-center">
+                                  <span className="cursor-pointer" onClick={()=>{
+                                    handleDelete(index)
+                                  }}>delete</span>
+                                  <span className="cursor-pointer" onClick={()=>{
+                                    setisEditEquipmentModal(true)
+                                  }}>edit</span>
+                                </div>
+                               </td>
+                        
                       </tr>
                     ))}
                   </tbody>
@@ -312,14 +337,14 @@ export default function EquipmentProcurementForm() {
       </div>
 
       {/* Equipment Modal */}
-      {isModalOpen && (
+      {isAddEquipmentModal && (
         <div className="fixed top-9 inset-0 z-50 flex items-center justify-center p-4 bg-white/30 backdrop-blur-md">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="p-6 space-y-6">
               <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Add Equipment Details</h3>
                 <button
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => setisAddEquipmentModal(false)}
                   className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -415,7 +440,7 @@ export default function EquipmentProcurementForm() {
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <button
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => setisAddEquipmentModal(false)}
                   className="px-4 cursor-pointer py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Cancel
@@ -426,6 +451,31 @@ export default function EquipmentProcurementForm() {
                 >
                   Add Equipment
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
+      {isEditEquipmentModal && (
+        <div className="fixed top-9 inset-0 z-50 flex items-center justify-center p-4 bg-white/30 backdrop-blur-md">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="p-6 space-y-6">
+              <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Edit Equipment Details</h3>
+                <button
+                  onClick={() => setisEditEquipmentModal(false)}
+                  className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div>
+                  hello
+                </div>
               </div>
             </div>
           </div>

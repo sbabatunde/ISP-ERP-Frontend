@@ -39,7 +39,7 @@ const ProcurementForm = () => {
       <div className="w-full max-w-lg bg-white rounded-xl shadow-lg overflow-hidden p-10">
         <h2 className="text-3xl font-semibold text-center mb-4">Register</h2>
         <p className="text-center mb-6 text-gray-600">
-          Create your account. It’s free and only takes a minute.
+          Create your account. It's free and only takes a minute.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -50,7 +50,7 @@ const ProcurementForm = () => {
               placeholder="Firstname"
               value={formData.firstname}
               onChange={handleChange}
-              className="border border-gray-300 rounded-md py-2 px-3 w-full"
+              className="border border-gray-300 rounded-md py-2 px-3 w-full text-slate-900 dark:text-white"
             />
             <input
               type="text"
@@ -58,7 +58,7 @@ const ProcurementForm = () => {
               placeholder="Surname"
               value={formData.surname}
               onChange={handleChange}
-              className="border border-gray-300 rounded-md py-2 px-3 w-full"
+              className="border border-gray-300 rounded-md py-2 px-3 w-full text-slate-900 dark:text-white"
             />
           </div>
 
@@ -69,7 +69,7 @@ const ProcurementForm = () => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="border border-gray-300 rounded-md py-2 px-3 w-full"
+              className="border border-gray-300 rounded-md py-2 px-3 w-full text-slate-900 dark:text-white"
             />
           </div>
 
@@ -80,7 +80,7 @@ const ProcurementForm = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="border border-gray-300 rounded-md py-2 px-3 w-full"
+              className="border border-gray-300 rounded-md py-2 px-3 w-full text-slate-900 dark:text-white"
             />
           </div>
 
@@ -91,7 +91,7 @@ const ProcurementForm = () => {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="border border-gray-300 rounded-md py-2 px-3 w-full"
+              className="border border-gray-300 rounded-md py-2 px-3 w-full text-slate-900 dark:text-white"
             />
           </div>
 

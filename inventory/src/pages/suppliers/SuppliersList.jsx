@@ -74,7 +74,7 @@ export default function SuppliersList() {
           placeholder="Search by supplier name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-4 mb-6 rounded-xl border dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+          className="w-full p-4 mb-6 rounded-xl border dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-slate-900 dark:text-white"
         />
 
         <div className="overflow-x-auto rounded-xl">
@@ -212,14 +212,14 @@ export default function SuppliersList() {
                 type="text"
                 value={editedSupplier?.name || ''}
                 onChange={(e) => setEditedSupplier({ ...editedSupplier, name: e.target.value })}
-                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
                 placeholder="Name"
               />
               <input
                 type="email"
                 value={editedSupplier?.contact_email || ''}
                 onChange={(e) => setEditedSupplier({ ...editedSupplier, contact_email: e.target.value })}
-                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
                 placeholder="Email"
               />
               <button

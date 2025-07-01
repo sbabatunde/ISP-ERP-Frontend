@@ -103,7 +103,7 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">From Location Type:</label>
                         <select name="from_location_type" value={formData.from_location_type} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             <option value="">Select Type</option>
                             <option value="store">Store</option>
                             <option value="POP">POP</option>
@@ -114,7 +114,7 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">From Location:</label>
                         <select name="from_location_id" value={formData.from_location_id} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             <option value="">Select Location</option>
                             {locations.map(location => (
                                 <option key={location.id} value={location.id}>{location.name}</option>
@@ -126,7 +126,7 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">To Location Type:</label>
                         <select name="to_location_type" value={formData.to_location_type} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             <option value="">Select Type</option>
                             <option value="store">Store</option>
                             <option value="POP">POP</option>
@@ -137,7 +137,7 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">To Location:</label>
                         <select name="to_location_id" value={formData.to_location_id} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             <option value="">Select Location</option>
                             {locations.map(location => (
                                 <option key={location.id} value={location.id}>{location.name}</option>
@@ -149,7 +149,7 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">Movement Type:</label>
                         <select name="movement_type" value={formData.movement_type} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             <option value="">Select Type</option>
                             <option value="installation">Installation</option>
                             <option value="retrieval">Retrieval</option>
@@ -161,14 +161,14 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">Movement Date:</label>
                         <input type="date" name="movement_date" value={formData.movement_date} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md" />
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white" />
                     </div>
     
                     {/* Equipment Items */}
                     <div>
                         <label className="block font-medium">Equipment Items:</label>
                         <select name="equipment_item_ids" multiple onChange={handleEquipmentSelection} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             {equipmentItems.map(item => (
                                 <option key={item.id} value={item.id}>{item.serial_number} - {item.equipment.name}</option>
                             ))}
@@ -179,14 +179,14 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">Logistics Cost:</label>
                         <input type="number" name="logistics_cost" value={formData.logistics_cost} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md" />
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white" />
                     </div>
     
                     {/* Moved By */}
                     <div>
                         <label className="block font-medium">Moved By:</label>
                         <select name="moved_by" value={formData.moved_by} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             <option value="">Select User</option>
                             {users.map(user => (
                                 <option key={user.id} value={user.id}>{user.name}</option>
@@ -198,7 +198,7 @@ const EquipmentMovementForm = () => {
                     <div>
                         <label className="block font-medium">Handled By:</label>
                         <select name="handled_by" value={formData.handled_by} onChange={handleChange} required
-                            className="w-full p-2 border rounded-md">
+                            className="w-full p-2 border rounded-md text-slate-900 dark:text-white">
                             <option value="">Select User</option>
                             {users.map(user => (
                                 <option key={user.id} value={user.id}>{user.name}</option>

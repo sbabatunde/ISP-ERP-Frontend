@@ -63,7 +63,7 @@ export default function EquipmentTypeForm() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -73,7 +73,7 @@ export default function EquipmentTypeForm() {
                   value={formData.description}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm rounded border text-white border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:text-white"
                 ></textarea>
               </div>
               <div>
@@ -83,7 +83,7 @@ export default function EquipmentTypeForm() {
                   value={formData.type}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 text-white py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:text-white"
                 >
                   <option value="outdoor">Outdoor</option>
                   <option value="indoor">Indoor</option>
