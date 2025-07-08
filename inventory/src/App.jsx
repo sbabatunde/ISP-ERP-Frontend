@@ -60,7 +60,13 @@ export default function Test () {
                 {
                     path: "equipment-type-form",
                     element:<EquipmentTypeForm/>
+                },
+                {
+                    path: "Products",
+                    element:"kk"
                 }
+                
+                
             ],
         },
     ])

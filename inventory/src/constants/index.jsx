@@ -55,6 +55,12 @@ export const navbarLinks = [
                 icon: Package,
             }
         ]
+    },{
+        title:"Products",
+        links:[{
+            path:"/products",
+        label:"products"
+    }]
     },
     {
         title: "Settings",
