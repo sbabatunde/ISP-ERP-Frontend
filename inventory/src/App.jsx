@@ -9,6 +9,7 @@ import SuppliersList from "./pages/suppliers/SuppliersList"
 import EquipmentForm from "./pages/Equipment-procurement/Equipment";
 import EquipmentProcurementForm from "./pages/Equipment-procurement/EquipmentProcurementForm"
 import EquipmentTypeForm from "./pages/Equipment-procurement/EquipmentTypeForm"
+import SuppliersEdit from "./pages/suppliers/suppliersEdit"
 
 export default function Test () {
     const router = createBrowserRouter([
@@ -43,6 +44,10 @@ export default function Test () {
                 {
                     path: "suppliers-list",
                     element:<SuppliersList/>
+                },
+                {
+                    path: "suppliers-edit/:id",
+                    element:<SuppliersEdit/>
                 },
                 {
                     path: "equipment-form",

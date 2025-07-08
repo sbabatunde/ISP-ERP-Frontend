@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchSuppliersList, updateSupplier } from "../../api/axios";
+import { Loader2 } from "lucide-react";
+import { fetchSuppliersList, updateSupplier,deleteSupplierDetails  } from "../../api/axios";
 import { CiRead } from "react-icons/ci";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { FiDelete } from "react-icons/fi";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 export default function SuppliersList() {
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
@@ -14,7 +15,7 @@ export default function SuppliersList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
@@ -55,17 +56,30 @@ export default function SuppliersList() {
     }
   };
 
+  const handleDelete = async (supplierId) =>{
+const response  = await deleteSupplierDetails(supplierId)
+console.log(response)
+  }
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedSupplier(null);
   };
 
-  if (loading) return <p className="text-center text-[30px] mt-[100px] animate-pulse">Loading...</p>;
+ if (loading) return (
+  <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 dark:bg-gray-900 dark:bg-opacity-80 z-50">
+    <div className="flex flex-col items-center gap-3">
+      <Loader2 className="h-12 w-12 text-pink-600 dark:text-pink-400 animate-spin" />
+      <p className="text-gray-600 dark:text-gray-400 font-medium">Loading supplier data...</p>
+    </div>
+  </div>
+);
   if (error) return <p className="text-center text-red-500 mt-6">{error}</p>;
 
+
   return (
-    <div className="min-h-screen p-6">
-      <div className="  bg-white dark:bg-slate-900 shadow-xl rounded-3xl p-8">
+    <div className="min-h-screen ">
+      <div className="  bg-white dark:bg-slate-900 shadow-xl rounded-xl p-8">
       
         <h1 className="text-4xl font-extrabold text-center dark:text-white text-slate-800 mb-10">Suppliers Directory</h1>
 
@@ -74,14 +88,14 @@ export default function SuppliersList() {
           placeholder="Search by supplier name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-4 mb-6 rounded-xl border dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-slate-900 dark:text-white"
+          className="w-full p-4 mb-6 rounded-[7px] border dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-slate-900 dark:text-white"
         />
 
-        <div className="overflow-x-auto rounded-xl">
+        <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-300 dark:divide-slate-700">
             <thead className="bg-pink-200 dark:bg-slate-800">
               <tr>
-                {['Name', 'Contact', 'Email', 'Phone', 'Address', 'Website',"Actions"].map((head) => (
+                {['Name', 'Email', 'Phone', 'Address', 'Website',"Actions"].map((head) => (
                   <th key={head} className="px-4 py-3 text-left text-sm font-bold text-slate-700 dark:text-slate-200 uppercase">
                     {head}
                   </th>
@@ -93,7 +107,7 @@ export default function SuppliersList() {
                 filteredSuppliers.map((supplier, idx) => (
                   <tr key={supplier.id || idx} className="hover:bg-pink-50 dark:hover:bg-slate-800">
                     <td className="px-4 py-4 font-semibold text-slate-700 dark:text-slate-100">{supplier.name}</td>
-                    <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.contact_name}</td>
+                    {/* <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.contact_name}</td> */}
                     <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.contact_email}</td>
                     <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.contact_phone}</td>
                     <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.address || 'N/A'}</td>
@@ -103,10 +117,10 @@ export default function SuppliersList() {
                         <button onClick={() => handleView(supplier)} className="p-2 rounded-full bg-green-200 dark:bg-green-900/50 text-green-700 hover:scale-110">
                           <CiRead size={18} />
                         </button>
-                        <button onClick={() => handleEdit(supplier)} className="p-2 rounded-full bg-yellow-200 dark:bg-yellow-900/50 text-yellow-700 hover:scale-110">
+                        <button onClick={() => navigate(`/suppliers-edit/${supplier.id}`)} className="p-2 rounded-full bg-yellow-200 dark:bg-yellow-900/50 text-yellow-700 hover:scale-110">
                           <MdEdit size={18} />
                         </button>
-                        <button className="p-2 rounded-full bg-red-200 dark:bg-red-900/50 text-red-700 hover:scale-110">
+                        <button onClick={()=>{handleDelete(supplier.id)}} className="p-2 rounded-full bg-red-200 dark:bg-red-900/50 text-red-700 hover:scale-110">
                           <MdDelete size={18} />
                         </button>
                       </div>

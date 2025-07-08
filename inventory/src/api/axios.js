@@ -80,4 +80,17 @@ export const createEquipmentType = async (formData) => {
     return response.data;
 };
 
+// Fetch supplier details
+export const fetchSupplierDetails = async (supplierId) => {
+    const response = await apiClient.get(`/inventory/suppliers/${supplierId}`);
+    return response.data?.data || {};
+};
+
+// Delete supplier data
+export const deleteSupplierDetails = async (supplierId) =>{
+    console.log(supplierId)
+    const response = await apiClient.delete(`/inventory/suppliers/${supplierId}`)
+    return response.data?.data 
+}
+
 export default apiClient;
