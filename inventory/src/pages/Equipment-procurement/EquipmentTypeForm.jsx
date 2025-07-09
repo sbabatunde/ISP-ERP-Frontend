@@ -61,6 +61,7 @@ export default function EquipmentTypeForm() {
                   type="text"
                   name="name"
                   value={formData.name}
+                  placeholder="router, radio, dish, etc."
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
@@ -85,8 +86,8 @@ export default function EquipmentTypeForm() {
                   required
                   className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 >
-                  <option value="outdoor">Outdoor</option>
-                  <option value="indoor">Indoor</option>
+                  <option value="outdoor">Outdoor Unit</option>
+                  <option value="indoor">Indoor Unit</option>
                 </select>
               </div>
             </div>

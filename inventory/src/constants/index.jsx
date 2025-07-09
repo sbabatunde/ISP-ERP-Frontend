@@ -58,8 +58,10 @@ export const navbarLinks = [
     },{
         title:"Products",
         links:[{
+            label:"Products",
             path:"/products",
-        label:"products"
+            icon:Package
+
     }]
     },
     {

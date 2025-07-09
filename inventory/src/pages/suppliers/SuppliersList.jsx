@@ -114,7 +114,7 @@ console.log(response)
                     <td className="px-4 py-4 text-slate-700 dark:text-slate-200">{supplier.website || 'N/A'}</td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex justify-center gap-2">
-                        <button onClick={() => handleView(supplier)} className="p-2 rounded-full bg-green-200 dark:bg-green-900/50 text-green-700 hover:scale-110">
+                        <button onClick={() => navigate(`/suppliers-view/${supplier.id}`)} className="p-2 rounded-full bg-green-200 dark:bg-green-900/50 text-green-700 hover:scale-110">
                           <CiRead size={18} />
                         </button>
                         <button onClick={() => navigate(`/suppliers-edit/${supplier.id}`)} className="p-2 rounded-full bg-yellow-200 dark:bg-yellow-900/50 text-yellow-700 hover:scale-110">

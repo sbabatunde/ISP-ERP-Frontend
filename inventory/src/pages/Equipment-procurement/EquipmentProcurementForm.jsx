@@ -21,7 +21,9 @@ export default function EquipmentProcurementForm() {
     current_serial_number: "",
   });
 
+
   const [equipmentTypes, setEquipmentTypes] = useState([]);
+  console.log(equipmentTypes)
   const [suppliers, setSuppliers] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -120,7 +122,7 @@ export default function EquipmentProcurementForm() {
       setIsSubmitting(false);
     }
   };
-  console.log(formData.equipment)
+
 
   useEffect(() => {
     if (success || error) {
@@ -140,7 +142,30 @@ export default function EquipmentProcurementForm() {
       total_cost: updatedEquipment.reduce((sum, equipment) => sum + Number(equipment.unit_cost), 0),
     });
   }
+useEffect(() => {
+  const findModelNumber = equipmentTypes.find(
+    (eq) => eq.id === Number(serialNumberData.id)
+  );
+  console.log(findModelNumber)
+  if (findModelNumber) {
+    setSerialNumberData((prev) => ({
+      ...prev,
+      model_number: findModelNumber.model,
+    }));
+  }
+}, [serialNumberData.id, equipmentTypes]);
 
+useEffect(()=>{
+  handleTotalCost()
+},[serialNumberData.quantity, serialNumberData.unit_cost])
+function handleTotalCost(){
+  const totalCost = serialNumberData.quantity*serialNumberData.unit_cost
+  console.log(totalCost)
+  setSerialNumberData((prev) => ({
+    ...prev,
+    total_cost_equipment: totalCost,
+  }));
+}
   return (
     <div className="w-full min-h-screen py-4">
       <div className="flex items-center gap-3 mb-6">
@@ -344,7 +369,16 @@ export default function EquipmentProcurementForm() {
               <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Add Equipment Details</h3>
                 <button
-                  onClick={() => setisAddEquipmentModal(false)}
+                  onClick={() => {
+                    setisAddEquipmentModal(false)
+                    setSerialNumberData({
+                      id: "",
+                      serial_numbers: [],
+                      model_number: "",
+                      unit_cost: "",
+                      total_cost_equipment: "",
+                    })
+                  }}
                   className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -365,7 +399,7 @@ export default function EquipmentProcurementForm() {
                     <option value="">Select Equipment Type</option>
                     {equipmentTypes.map((eqType) => (
                       <option key={eqType.id} value={eqType.id}>
-                        {eqType.name} ({eqType.type})
+                        {eqType.name} ({eqType.equipment_type.description})
                       </option>
                     ))}
                   </select>
@@ -373,8 +407,8 @@ export default function EquipmentProcurementForm() {
                 {[
                   "model_number",
                   "unit_cost",
-                  "total_cost_equipment",
                   "quantity",
+                  "total_cost_equipment",
                   "unit"
                 ].map((field) => (
                   <div key={field} className="space-y-2">
@@ -385,8 +419,10 @@ export default function EquipmentProcurementForm() {
                       type={field.includes("cost") || field === "quantity" ? "number" : "text"}
                       name={field}
                       value={serialNumberData[field]}
+                      placeholder={field.includes("cost") || field === "quantity" ? "0" : "Enter value"}
+                      readOnly={field === "total_cost_equipment" || field === "model_number"}
                       onChange={handleSerialChange}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${field === "model_number" ? "cursor-not-allowed text-gray-20" : ""}`}
                       required
                     />
                   </div>
