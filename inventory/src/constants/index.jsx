@@ -1,4 +1,4 @@
-import { Home, BarChart2, FileText, Users, ListChecks, PackagePlus, ShoppingBag, Package, Settings } from "lucide-react";
+import { Home, BarChart2, FileText, Users, ListChecks, PackagePlus, ShoppingBag, Package, Settings, PackageCheck,  } from "lucide-react";
 
 export const navbarLinks = [
     {
@@ -62,7 +62,13 @@ export const navbarLinks = [
             path:"/products",
             icon:Package
 
-    }]
+    },
+    {
+        label:"Equipment Type",
+        path:"/equipment-type-list",
+        icon: PackageCheck
+    }
+    ]
     },
     {
         title: "Settings",

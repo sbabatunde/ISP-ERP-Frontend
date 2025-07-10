@@ -11,6 +11,8 @@ import EquipmentProcurementForm from "./pages/Equipment-procurement/EquipmentPro
 import EquipmentTypeForm from "./pages/Equipment-procurement/EquipmentTypeForm"
 import SuppliersEdit from "./pages/suppliers/suppliersEdit"
 import SuppliersView from "./pages/suppliers/suppliersView"
+import ProductTypeList from "./pages/Equipment-procurement/productTypeList"
+import EquipmentTypeList from "./pages/Equipment-procurement/EquipmentTypeList"
 
 export default function Test () {
     const router = createBrowserRouter([
@@ -68,7 +70,11 @@ export default function Test () {
                 },
                 {
                     path: "products",
-                    element:<h1 className="title">Products</h1>
+                    element:<ProductTypeList/>
+                },
+                {
+                    path: "equipment-type-list",
+                    element:<EquipmentTypeList/>
                 }
                 
                 

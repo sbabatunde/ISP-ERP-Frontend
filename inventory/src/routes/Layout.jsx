@@ -20,13 +20,13 @@ const Layout = () => {
 
     const sidebarRef = useRef(null);
 
-    useEffect(() => {
-        if(location.pathname.includes("suppliers")){
-            setCollapsed(true);
-        }else{
-            setCollapsed(!isDesktopDevice);
-        }
-    }, [isDesktopDevice, location.pathname]);
+    // useEffect(() => {
+    //     if(location.pathname.includes("suppliers")){
+    //         setCollapsed(true);
+    //     }else{
+    //         setCollapsed(!isDesktopDevice);
+    //     }
+    // }, [isDesktopDevice, location.pathname]);
 
     useClickOutside([sidebarRef], () => {
         if (!isDesktopDevice && !collapsed) {

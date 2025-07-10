@@ -80,6 +80,7 @@ export const createEquipmentType = async (formData) => {
     return response.data;
 };
 
+
 // Fetch supplier details
 export const fetchSupplierDetails = async (supplierId) => {
     const response = await apiClient.get(`/inventory/suppliers/${supplierId}`);

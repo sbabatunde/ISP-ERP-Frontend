@@ -399,7 +399,7 @@ function handleTotalCost(){
                     <option value="">Select Equipment Type</option>
                     {equipmentTypes.map((eqType) => (
                       <option key={eqType.id} value={eqType.id}>
-                        {eqType.name} ({eqType.equipment_type.description})
+                        {eqType.name} ({eqType.equipment_type.type})
                       </option>
                     ))}
                   </select>
