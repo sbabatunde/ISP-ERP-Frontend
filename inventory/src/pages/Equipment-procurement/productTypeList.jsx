@@ -4,6 +4,7 @@ import { Edit, Trash2, Plus, Loader2, Search, ChevronDown, X } from "lucide-reac
 import { useNavigate } from "react-router-dom";
 
 function ProductTypeList() {
+    const navigate = useNavigate();
     const [equipmentTypes, setEquipmentTypes] = useState([]);
     const [filteredTypes, setFilteredTypes] = useState([]);
     const [error, setError] = useState(null);
@@ -70,7 +71,6 @@ function ProductTypeList() {
     };
 
     const handleAddProduct = () => {
-        navigate("/equipment-type-form");
     };
 
     const handleEdit = (id) => {
@@ -124,8 +124,8 @@ function ProductTypeList() {
                         )}
                     </div>
                     <button 
-                        onClick={handleAddProduct}
-                        className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium whitespace-nowrap shadow-sm"
+                        onClick={() => navigate("/equipment-type-form")}
+                        className="px-4 py-2 cursor-pointer bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium whitespace-nowrap shadow-sm"
                     >
                         <Plus className="w-4 h-4" />
                         Add Product
