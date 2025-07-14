@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchSuppliersList, fetchEquipmentList, createProcurement } from "../../api/axios";
+import { MdEdit, MdDelete } from "react-icons/md";
+
 
 export default function EquipmentProcurementForm() {
   const [formData, setFormData] = useState({
@@ -174,7 +176,7 @@ export default function EquipmentProcurementForm() {
 
   const openAddEquipmentPanel = () => {
     setEquipmentPanel({
-      isOpen: true,
+      isOpen: !equipmentPanel.isOpen,
       data: {
         id: "",
         serial_numbers: [],
@@ -352,9 +354,10 @@ export default function EquipmentProcurementForm() {
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-white">₦</span>
                       <input
-                        type="number"
+                        type="text"
                         name="total_cost"
-                        value={formData.total_cost}
+                        maxLength={10}
+                        value={formData.total_cost ? `₦${parseFloat(formData.total_cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : ''}
                         readOnly
                         className="w-full pl-8 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       />
@@ -380,7 +383,7 @@ export default function EquipmentProcurementForm() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
-                    Add Equipment
+                   {equipmentPanel.isOpen ? "Close Panel" : "Add Equipment"}
                   </button>
                 </div>
                 {formData.equipment.length > 0 ? (
@@ -403,8 +406,8 @@ export default function EquipmentProcurementForm() {
                             <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                               <div className="flex flex-wrap gap-1 max-w-xs">
                                 {item.serial_numbers.slice(0, 3).map((sn, i) => (
-                                  <span key={i} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
-                                    {sn}
+                                  <span key={i} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-bold">
+                                    {sn} 
                                   </span>
                                 ))}
                                 {item.serial_numbers.length > 3 && (
@@ -426,16 +429,16 @@ export default function EquipmentProcurementForm() {
                                 <button
                                   type="button"
                                   onClick={() => openEditEquipmentPanel(index)}
-                                  className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300"
+                                  className="cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-2xl dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300"
                                 >
-                                  Edit
+                                  <MdEdit className="w-5 h-5 hover:text-indigo-900 dark:hover:text-indigo-300 hover:scale-110 transition-all duration-300"/>
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleDelete(index)}
-                                  className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
+                                  className="cursor-pointer text-red-600 bg-red-100 p-2 rounded-2xl dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
                                 >
-                                  Delete
+                                  <MdDelete className="w-5 h-5 hover:text-red-900 dark:hover:text-red-300 hover:scale-110 transition-all duration-300"/>
                                 </button>
                               </div>
                             </td>

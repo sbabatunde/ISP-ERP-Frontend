@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { fetchEquipmentTypes } from "../../api/axios";
 import { Loader2, Edit, Trash2, Plus, Search, ChevronDown, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function EquipmentTypeList() {
+    const navigate = useNavigate();
     const [equipmentTypes, setEquipmentTypes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -111,8 +113,8 @@ function EquipmentTypeList() {
                         )}
                     </div>
                     <button 
-                        onClick={handleAddEquipmentType}
-                        className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium whitespace-nowrap shadow-sm"
+                        onClick={() => navigate("/equipment-type-form")}
+                        className="px-4 py-2 cursor-pointer bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium whitespace-nowrap shadow-sm"
                     >
                         <Plus className="w-4 h-4" />
                         Add New

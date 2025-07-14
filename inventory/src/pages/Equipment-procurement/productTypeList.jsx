@@ -124,7 +124,7 @@ function ProductTypeList() {
                         )}
                     </div>
                     <button 
-                        onClick={() => navigate("/equipment-type-form")}
+                        onClick={() => navigate("/equipment-form")}
                         className="px-4 py-2 cursor-pointer bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium whitespace-nowrap shadow-sm"
                     >
                         <Plus className="w-4 h-4" />

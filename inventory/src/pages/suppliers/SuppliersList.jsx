@@ -226,14 +226,14 @@ console.log(response)
                 type="text"
                 value={editedSupplier?.name || ''}
                 onChange={(e) => setEditedSupplier({ ...editedSupplier, name: e.target.value })}
-                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
+                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800  focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
                 placeholder="Name"
               />
               <input
                 type="email"
                 value={editedSupplier?.contact_email || ''}
                 onChange={(e) => setEditedSupplier({ ...editedSupplier, contact_email: e.target.value })}
-                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
+                className="w-full p-3 mb-4 rounded-lg border dark:border-slate-700 bg-white dark:bg-slate-800  focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
                 placeholder="Email"
               />
               <button
