@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const apiClient = axios.create({
     // baseURL: 'http://10.0.0.253:8000/api', // Laravel API base URL
-    // baseURL: 'http://localhost:8000/api', // Laravel API base URL
-    baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: 'http://localhost:8000/api', // Laravel API base URL
+    // baseURL: 'http://127.0.0.1:8000/api',
     headers: {
         'Content-Type': 'application/json',
         // Accept: 'application/json',
@@ -94,5 +94,24 @@ export const deleteSupplierDetails = async (supplierId) =>{
     const response = await apiClient.delete(`/inventory/suppliers/${supplierId}`)
     return response.data?.data 
 }
+
+// Fetch orders list
+export const fetchOrdersList = async () => {
+    const response = await apiClient.get('/inventory/procurements');
+    return response.data || [];
+};
+
+// Fetch procurement details
+export const fetchProcurementDetails = async (procurementId) => {
+    const response = await apiClient.get(`/inventory/procurements/${procurementId}`);
+    return response.data|| {};
+};
+
+// Fetch Individual Equipment Type Details
+export const fetchIndividualEquipmentTypeDetails = async (equipmentTypeId) => {
+    const response = await apiClient.get(`/inventory/equipment-type/${equipmentTypeId}`);
+    return response.data || {};
+};
+
 
 export default apiClient;

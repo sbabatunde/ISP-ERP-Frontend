@@ -1,4 +1,5 @@
-import { Home, BarChart2, FileText, Users, ListChecks, PackagePlus, ShoppingBag, Package, Settings, PackageCheck,  } from "lucide-react";
+import { Home, BarChart2,Clock, FileText, Users, ListChecks, PackagePlus, ShoppingBag, Package, Settings, PackageCheck, Check  } from "lucide-react";
+
 
 export const navbarLinks = [
     {
@@ -20,6 +21,19 @@ export const navbarLinks = [
                 icon: FileText,
             }
         ],
+    },
+    {
+        title: "Orders",
+        links:[{
+            label:"Completed",
+            path:"/completed-orders",
+            icon:Check
+        },
+        {
+            label:"Pending",
+            path:"/pending-orders",
+            icon:Clock
+        }]
     },
     {
         title: "Suppliers",

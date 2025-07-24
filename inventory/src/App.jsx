@@ -4,7 +4,7 @@ import {ThemeProvider} from "./contexts/theme-context"
 
 import Layout from "./routes/Layout"
 import DashboardPage from "./routes/dashboard/page";
-import SuppliersForm from "./components/Suppliers";
+import SuppliersForm from "./pages/suppliers/SuppliersForm";
 import SuppliersList from "./pages/suppliers/SuppliersList"
 import EquipmentForm from "./pages/Equipment-procurement/Equipment";
 import EquipmentProcurementForm from "./pages/Equipment-procurement/EquipmentProcurementForm"
@@ -13,6 +13,11 @@ import SuppliersEdit from "./pages/suppliers/suppliersEdit"
 import SuppliersView from "./pages/suppliers/suppliersView"
 import ProductTypeList from "./pages/Equipment-procurement/productTypeList"
 import EquipmentTypeList from "./pages/Equipment-procurement/EquipmentTypeList"
+import CompleteOrder from "./pages/Orders/CompleteOrder"
+import PendingOrder from "./pages/Orders/PendingOrder"
+import ProcurementDetails from "./pages/Orders/components/individual"
+import RequisitionForm from "./pages/Orders/RequisitionForm"
+import PrintRequisitionForm from "./pages/Orders/components/preview"
 
 export default function Test () {
     const router = createBrowserRouter([
@@ -75,8 +80,19 @@ export default function Test () {
                 {
                     path: "equipment-type-list",
                     element:<EquipmentTypeList/>
-                }
-                
+                },
+                {
+                    path: "completed-orders",
+                    element:<CompleteOrder/>
+                },
+                {
+                    path: "pending-orders",
+                    element:<PendingOrder/>
+                },
+                {path:"procurement-details/:id",
+                element:<ProcurementDetails/>},
+                {path:"requisition-form/:id",
+                element:<RequisitionForm/>}
                 
             ],
         },

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchEquipmentTypes } from "../../api/axios";
 import { Loader2, Edit, Trash2, Plus, Search, ChevronDown, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";0
 
 function EquipmentTypeList() {
     const navigate = useNavigate();
@@ -12,6 +12,7 @@ function EquipmentTypeList() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
 
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
