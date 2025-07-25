@@ -18,6 +18,7 @@ import PendingOrder from "./pages/Orders/PendingOrder"
 import ProcurementDetails from "./pages/Orders/components/individual"
 import RequisitionForm from "./pages/Orders/RequisitionForm"
 import PrintRequisitionForm from "./pages/Orders/components/preview"
+import VoucherForm from "./pages/Orders/VoucherForm"
 
 export default function Test () {
     const router = createBrowserRouter([
@@ -92,7 +93,9 @@ export default function Test () {
                 {path:"procurement-details/:id",
                 element:<ProcurementDetails/>},
                 {path:"requisition-form/:id",
-                element:<RequisitionForm/>}
+                element:<RequisitionForm/>},
+                {path:"voucher-form/:id",
+                element:<VoucherForm/>}
                 
             ],
         },

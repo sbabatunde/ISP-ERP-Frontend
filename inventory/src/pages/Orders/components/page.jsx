@@ -190,7 +190,7 @@ function Page({ title, orders, loading }) {
                                                     size="sm" 
                                                     className={`flex flex-col  gap-1 cursor-pointer rounded-full p-2 ${hoveredRow === order.id ? 'bg-gray-100 dark:bg-gray-800' : ''} transition-all duration-200`}
                                                     aria-label="Print order"
-                                                    onClick={() => navigate(`/requisition-form/${order.id}`)}
+                                                    onClick={() => navigate(`/voucher-form/${order.id}`)}
                                                 >
                                                     <span className='text-xs text-gray-600 dark:text-gray-300'>Voucher Form</span> <span className='text-xs text-gray-600 dark:text-gray-300'> <Printer className=" h-4 w-4 text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors" /></span>
                                                 </Button>

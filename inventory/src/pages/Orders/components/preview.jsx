@@ -91,14 +91,20 @@ function Preview({ procurement }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {procurement?.procurement_items?.map((item) => (
+            {procurement?.procurement_items?.map((item) => {
+               const equipment = procurement?.equipment?.find(
+                eq => eq.id === item.equipment_id
+              );
+              const description = equipment?.equipment_type?.description;
+              return (
               <TableRow className='py-2 print:py-1'>
                 <TableCell className='font-medium'>{item.quantity}</TableCell>
-                <TableCell>{procurement.description}</TableCell>
+                <TableCell className='max-w-[200px] overflow-hidden mx-auto'>{description}</TableCell>
                 <TableCell>{formatCurrency(item.unit_cost)}</TableCell>
                 <TableCell>{formatCurrency(item.total_cost)}</TableCell>
               </TableRow>
-            ))}
+            )
+            })}
             <TableRow className='bg-gray-50'>
               <TableCell colSpan={3} className='text-right font-semibold py-2 print:py-1'>Total:</TableCell>
               <TableCell className='font-semibold'>{formatCurrency(procurement?.total_cost)}</TableCell>
