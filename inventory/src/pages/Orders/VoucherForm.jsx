@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { fetchProcurementDetails } from "../../api/axios";
 import { ToWords } from "to-words";
 import logo from "../../assets/sys.png";
 import { Loader2 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 function VoucherForm() {
   const { id } = useParams();
+  const location = useLocation();
+  console.log(location.pathname);
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [signatureImage, setSignatureImage] = useState(null);
   const componentRef = useRef();
   const reactToPrintFn = useReactToPrint({
     contentRef: componentRef,
@@ -137,27 +140,33 @@ function VoucherForm() {
               </tr>
             </thead>
             <tbody>
-              {order?.procurement_items?.map((item, idx) => {
-                const equipment = order?.equipment?.find(
-                  (eq) => eq.id === item.equipment_id,
-                );
-                const description = equipment?.equipment_type?.description;
-                return (
-                  <tr key={idx}>
-                    <td className="border border-gray-300 p-2 text-sm">
-                      <span className="block max-w-xs truncate">
-                        {description}
-                      </span>
-                    </td>
-                    <td className="border border-gray-300 p-2 text-sm text-right">
-                      {currencyFormat(item.unit_cost)}
-                    </td>
-                    <td className="border border-gray-300 p-2 text-sm text-right">
-                      {currencyFormat(item.total_cost)}
-                    </td>
-                  </tr>
-                );
-              })}
+              {location === "/voucher-form" ? (
+                <>
+                  <p className="bg-red-600">hh</p>
+                </>
+              ) : (
+                order?.procurement_items?.map((item, idx) => {
+                  const equipment = order?.equipment?.find(
+                    (eq) => eq.id === item.equipment_id,
+                  );
+                  const description = equipment?.equipment_type?.description;
+                  return (
+                    <tr key={idx}>
+                      <td className="border border-gray-300 p-2 text-sm">
+                        <span className="block max-w-xs truncate">
+                          {description}
+                        </span>
+                      </td>
+                      <td className="border border-gray-300 p-2 text-sm text-right">
+                        {currencyFormat(item.unit_cost)}
+                      </td>
+                      <td className="border border-gray-300 p-2 text-sm text-right">
+                        {currencyFormat(item.total_cost)}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
               <tr>
                 <td className="border border-gray-300 p-2 text-sm font-bold">
                   Total
@@ -221,7 +230,44 @@ function VoucherForm() {
                   "",
                 ].map((item, idx) => (
                   <td key={idx} className="border border-gray-300 p-2 h-8">
-                    {item === "" ? (
+                    {idx === 5 ? (
+                      signatureImage ? (
+                        <div className="relative inline-block w-full">
+                          <button
+                            type="button"
+                            className="print:hidden absolute top-1 left-1 bg-white  border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-pink-100 hover:text-pink-600 shadow cursor-pointer transition-all z-10"
+                            onClick={() => setSignatureImage("")}
+                            title="Remove signature"
+                            style={{ lineHeight: 1 }}
+                          >
+                            ×
+                          </button>
+                          <img
+                            src={signatureImage}
+                            alt="Signature Preview"
+                            className="h-16 w-[100px] object-contain border border-gray-300 rounded shadow p-1 mx-auto"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className={`w-full border-b border-gray-300 outline-none ${!signatureImage ? "print:hidden" : ""}`}
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                  setSignatureImage(reader.result);
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                          />
+                        </div>
+                      )
+                    ) : item === "" ? (
                       <input
                         type="text"
                         className="w-full border-b border-gray-300 outline-none"

@@ -1,13 +1,14 @@
 import React from "react";
 import Preview from "./components/preview";
 import { fetchProcurementDetails } from "../../api/axios";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
 function RequisitionForm() {
   const [loading, setLoading] = useState(true);
-
+  const location = useLocation();
+  console.log(location.pathname);
   const { id } = useParams();
   console.log(id);
   const [procurement, setProcurement] = useState(null);
@@ -16,10 +17,19 @@ function RequisitionForm() {
 
   useEffect(() => {
     const fetchProcurement = async () => {
-      setLoading(true);
-      const procurement = await fetchProcurementDetails(id);
-      setProcurement(procurement);
-      setLoading(false);
+      if (location.pathname === "/requisition-form") {
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        const data = await fetchProcurementDetails(id);
+        setProcurement(data);
+      } catch (err) {
+        setError("Failed to fetch procurement");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchProcurement();
   }, [id]);

@@ -231,7 +231,7 @@ function Page({ title, orders, loading }) {
                         className={`h-8 w-8 p-0 rounded-full flex items-center justify-center ${hoveredRow === order.id ? "bg-gray-100 dark:bg-gray-800" : "bg-transparent"} transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800`}
                         aria-label="View order details"
                       >
-                        <Eye className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                        <Eye className="h-4 w-4 text-pink-600 dark:text-gray-300" />
                       </Button>
                       {order.status === "pending" && (
                         <>
@@ -253,7 +253,7 @@ function Page({ title, orders, loading }) {
       bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800
       transition-all duration-300 ease-in-out
       group-hover:scale-110 group-hover:shadow-sm
-      relative overflow-hidden
+      relative overflow-hidden cursor-pointer 
     `}
                               aria-label="Print requisition form"
                               onClick={() =>
@@ -261,7 +261,7 @@ function Page({ title, orders, loading }) {
                               }
                             >
                               {/* Printer icon with subtle animation */}
-                              <Printer className="h-4 w-4 text-gray-600 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110" />
+                              <Printer className="h-4 w-4 text-pink-600 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110" />
 
                               {/* Ripple effect */}
                               <span className="absolute inset-0 overflow-hidden">
@@ -287,7 +287,7 @@ function Page({ title, orders, loading }) {
       bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800
       transition-all duration-300 ease-in-out
       group-hover:scale-110 group-hover:shadow-sm
-      relative overflow-hidden
+      relative overflow-hidden cursor-pointer
     `}
                               aria-label="Print requisition form"
                               onClick={() =>
@@ -295,7 +295,7 @@ function Page({ title, orders, loading }) {
                               }
                             >
                               {/* Printer icon with subtle animation */}
-                              <Printer className="h-4 w-4 text-gray-600 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110" />
+                              <Printer className="h-4 w-4 text-pink-600 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110" />
 
                               {/* Ripple effect */}
                               <span className="absolute inset-0 overflow-hidden">
