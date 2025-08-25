@@ -13,7 +13,10 @@ import { useLocation } from "react-router-dom";
 export const Sidebar = forwardRef(({ collapsed }, ref) => {
   const location = useLocation();
   const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const isDark =
+    theme === "dark" ||
+    (theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
   const [openItems, setOpenItems] = useState([]);
   const [activeSection, setActiveSection] = useState([]);
 
@@ -26,13 +29,15 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
     setOpenItems((prev) =>
       prev.includes(title)
         ? prev.filter((item) => item !== title)
-        : [...prev, title]
+        : [...prev, title],
     );
   };
 
   useEffect(() => {
-    const isSectionActive = navbarLinks.map((item) => 
-      item.links.some(link => link.path === location.pathname) ? item.title : null
+    const isSectionActive = navbarLinks.map((item) =>
+      item.links.some((link) => link.path === location.pathname)
+        ? item.title
+        : null,
     );
     setActiveSection(isSectionActive);
   }, [location.pathname]);
@@ -46,30 +51,32 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
         "dark:bg-slate-900",
         "border-slate-200 dark:border-slate-800",
         collapsed ? "md:w-[72px] md:items-center" : "md:w-[250px]",
-        collapsed ? "max-md:-left-full" : "max-md:left-0"
+        collapsed ? "max-md:-left-full" : "max-md:left-0",
       )}
     >
       {/* Header section */}
-      <div className={cn(
-        "flex items-center p-4",
-        collapsed ? "justify-center" : "justify-between"
-      )}>
+      <div
+        className={cn(
+          "flex items-center p-4",
+          collapsed ? "justify-center" : "justify-between",
+        )}
+      >
         <div className="flex items-center gap-3 overflow-hidden">
           {isDark ? (
-            <MdOutlineDashboard 
-              size={24} 
+            <MdOutlineDashboard
+              size={24}
               className={cn(
                 "flex-shrink-0 transition-transform",
-                "text-pink-500 group-hover:scale-110"
-              )} 
+                "text-pink-500 group-hover:scale-110",
+              )}
             />
           ) : (
-            <MdDashboard 
-              size={24} 
+            <MdDashboard
+              size={24}
               className={cn(
                 "flex-shrink-0 transition-transform",
-                "text-pink-600 group-hover:scale-110"
-              )} 
+                "text-pink-600 group-hover:scale-110",
+              )}
             />
           )}
           {!collapsed && (
@@ -78,7 +85,7 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
             </h1>
           )}
         </div>
-        
+
         {/* Theme toggle button */}
         {!collapsed && (
           <button
@@ -86,7 +93,7 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
               "flex h-8 w-8 items-center justify-center rounded-full transition-all",
               "hover:bg-pink-100 hover:scale-105 active:scale-95",
               "dark:hover:bg-pink-800/50",
-              "shadow-sm hover:shadow-md"
+              "shadow-sm hover:shadow-md",
             )}
             onClick={() => setTheme(isDark ? "light" : "dark")}
             aria-label="Toggle theme"
@@ -108,16 +115,16 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
             className={cn("mb-2", collapsed && "md:items-center")}
           >
             {/* Section header with toggle */}
-            <div 
+            <div
               onClick={() => toggleItem(navbarLink.title)}
               className={cn(
                 "mb-1 flex cursor-pointer items-center rounded-lg p-2 transition-all",
                 "hover:bg-pink-100 dark:hover:bg-pink-800/30",
-                activeSection.includes(navbarLink.title) 
-                  ? "bg-pink-100/70 text-pink-600 shadow-inner dark:bg-pink-900/20 dark:text-pink-400" 
+                activeSection.includes(navbarLink.title)
+                  ? "bg-pink-100/70 text-pink-600 shadow-inner dark:bg-pink-900/20 dark:text-pink-400"
                   : "",
                 collapsed ? "justify-center" : "justify-between px-3",
-                "border border-transparent hover:border-pink-200 dark:hover:border-pink-700/50"
+                "border border-transparent hover:border-pink-200 dark:hover:border-pink-700/50",
               )}
             >
               {!collapsed && (
@@ -125,33 +132,38 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
                   {navbarLink.title}
                 </span>
               )}
-              {!collapsed && (
-                openItems.includes(navbarLink.title) ? (
-                  <ChevronUp 
-                    size={16} 
+              {!collapsed &&
+                (openItems.includes(navbarLink.title) ? (
+                  <ChevronUp
+                    size={16}
                     className={cn(
                       "text-slate-500 transition-transform duration-300",
-                      activeSection.includes(navbarLink.title) ? "text-pink-500 dark:text-pink-400" : ""
-                    )} 
+                      activeSection.includes(navbarLink.title)
+                        ? "text-pink-500 dark:text-pink-400"
+                        : "",
+                    )}
                   />
                 ) : (
-                  <ChevronDown 
-                    size={16} 
+                  <ChevronDown
+                    size={16}
                     className={cn(
                       "text-slate-500 transition-transform duration-300",
-                      activeSection.includes(navbarLink.title) ? "text-pink-500 dark:text-pink-400" : ""
-                    )} 
+                      activeSection.includes(navbarLink.title)
+                        ? "text-pink-500 dark:text-pink-400"
+                        : "",
+                    )}
                   />
-                )
-              )}
+                ))}
             </div>
-            
+
             {/* Links section */}
-            <div 
+            <div
               className={cn(
                 "space-y-1 overflow-hidden transition-all duration-300 ease-in-out",
-                openItems.includes(navbarLink.title) ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0",
-                collapsed && "md:flex md:flex-col md:items-center"
+                openItems.includes(navbarLink.title)
+                  ? "max-h-[500px] opacity-100"
+                  : "max-h-0 opacity-0",
+                collapsed && "md:flex md:flex-col md:items-center",
               )}
             >
               {navbarLink.links.map((link) => (
@@ -167,7 +179,7 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
                         ? "bg-pink-100/50 text-pink-600 shadow-inner dark:bg-pink-900/20 dark:text-pink-400"
                         : "text-slate-700 dark:text-slate-300",
                       collapsed ? "justify-center" : "px-3",
-                      "hover:translate-x-1 hover:scale-[1.02] active:scale-95"
+                      "hover:translate-x-1 hover:scale-[1.02] active:scale-95",
                     )
                   }
                   title={collapsed ? link.label : undefined}
@@ -177,12 +189,14 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
                       size={20}
                       className={cn(
                         "flex-shrink-0 transition-transform group-hover:scale-110",
-                        collapsed ? "mx-auto" : ""
+                        collapsed ? "mx-auto" : "",
                       )}
                     />
                   )}
                   {!collapsed && (
-                    <span className="truncate transition-all">{link.label}</span>
+                    <span className="truncate transition-all">
+                      {link.label}
+                    </span>
                   )}
                 </NavLink>
               ))}

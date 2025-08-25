@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CustomToast } from "@/components/customToast";
 
 const apiClient = axios.create({
   // baseURL: "http://10.0.0.253:8000/api", // Laravel API base URL
@@ -77,7 +78,9 @@ export const fetchEquipmentTypes = async () => {
 
 // Create a new equipment
 export const createEquipment = async (formData) => {
-  const response = await apiClient.post("/inventory/equipment", formData);
+  const response = await apiClient.post("/inventory/equipment", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return response.data;
 };
 
@@ -139,3 +142,34 @@ export const fetchUsersList = async () => {
 };
 
 export default apiClient;
+
+// Global toast handling for POST requests only
+apiClient.interceptors.response.use(
+  (response) => {
+    try {
+      if (response?.config?.method === "post") {
+        const message =
+          response?.data?.message || "Request completed successfully";
+        CustomToast("Success", message, "success");
+      }
+    } catch (err) {
+      // no-op for toast errors
+    }
+    return response;
+  },
+  (error) => {
+    try {
+      const method = error?.config?.method;
+      if (method === "post") {
+        const message =
+          error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong";
+        CustomToast("Error", message, "error");
+      }
+    } catch (err) {
+      // no-op for toast errors
+    }
+    return Promise.reject(error);
+  },
+);

@@ -100,9 +100,5 @@ export default function Test() {
       ],
     },
   ]);
-  return (
-    <ThemeProvider storageKey="theme">
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  );
+  return <RouterProvider router={router} />;
 }

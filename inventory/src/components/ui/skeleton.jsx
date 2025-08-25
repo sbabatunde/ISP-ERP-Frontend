@@ -1,15 +1,16 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-function Skeleton({
-  className,
-  ...props
-}) {
+function Skeleton({ className, ...props }) {
   return (
-    (<div
+    <div
       data-slot="skeleton"
-      className={cn("bg-accent animate-pulse rounded-md", className)}
-      {...props} />)
+      className={cn(
+        "bg-accent animate-pulse rounded-md dark:bg-accent/50",
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
-export { Skeleton }
+export { Skeleton };
