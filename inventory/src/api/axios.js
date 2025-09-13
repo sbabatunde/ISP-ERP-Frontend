@@ -3,7 +3,7 @@ import { CustomToast } from "@/components/customToast";
 
 const apiClient = axios.create({
   // baseURL: "http://10.0.0.253:8000/api", // Laravel API base URL
-  baseURL: "http://localhost:8000/api", // Laravel API base URL
+  baseURL: import.meta.env.VITE_API_URL, // Laravel API base URL
   // baseURL: 'http://127.0.0.1:8000/api',
   headers: {
     "Content-Type": "application/json",
@@ -67,6 +67,7 @@ export const updateSupplier = async (supplierData) => {
 // Create a new procurement
 export const createProcurement = async (formData) => {
   const response = await apiClient.post("/inventory/procurements", formData);
+  console.log(response.data);
   return response.data;
 };
 
@@ -120,6 +121,12 @@ export const fetchProcurementDetails = async (procurementId) => {
   return response.data || {};
 };
 
+// Fetch all procurements
+export const fetchAllProcurements = async () => {
+  const response = await apiClient.get("/inventory/procurements");
+  return response.data || [];
+};
+
 // Fetch Individual Equipment Type Details
 export const fetchIndividualEquipmentTypeDetails = async (equipmentTypeId) => {
   const response = await apiClient.get(
@@ -135,9 +142,22 @@ export const fetchLocations = async () => {
   return response.data.data;
 };
 
+//  Create locations
+export const createLocation = async (location) => {
+  const response = await apiClient.post("/inventory/locations", location);
+  console.log(response.data.data);
+  return response.data.data;
+};
+
 // Fetch users list
 export const fetchUsersList = async () => {
   const response = await apiClient.get(`/inventory/users`);
+  return response.data.data || [];
+};
+
+// Fetch store list
+export const fetchStoreList = async () => {
+  const response = await apiClient.get(`/inventory/stores/index`);
   return response.data.data || [];
 };
 

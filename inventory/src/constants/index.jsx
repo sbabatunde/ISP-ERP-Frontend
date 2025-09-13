@@ -128,6 +128,16 @@ export const navbarLinks = [
       },
     ],
   },
+  {
+    title: "Store",
+    links: [
+      {
+        label: "Store List",
+        path: "/store-list",
+        icon: ListChecks,
+      },
+    ],
+  },
 
   {
     title: "Settings",

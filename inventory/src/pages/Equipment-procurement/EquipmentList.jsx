@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { fetchEquipmentList } from '../../api/axios';
+import React, { useState, useEffect } from "react";
+import { fetchEquipmentList } from "../../api/axios";
 
 const EquipmentList = () => {
   const [equipmentData, setEquipmentData] = useState([]);
+  console.log(equipmentData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -43,22 +44,34 @@ const EquipmentList = () => {
           <tbody>
             {equipmentData.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b">{item.equipment_type_name}</td>
+                <td className="px-4 py-2 border-b">
+                  {item.equipment_type_name}
+                </td>
                 <td className="px-4 py-2 border-b">{item.model}</td>
-                <td className="px-4 py-2 border-b">{new Date(item.purchase_date).toLocaleDateString()}</td>
-                <td className="px-4 py-2 border-b">{item.unit || 'N/A'}</td>
+                <td className="px-4 py-2 border-b">
+                  {new Date(item.purchase_date).toLocaleDateString()}
+                </td>
+                <td className="px-4 py-2 border-b">{item.unit || "N/A"}</td>
                 <td className="px-4 py-2 border-b">${item.cost}</td>
                 <td className="px-4 py-2 border-b">{item.status}</td>
                 <td className="px-4 py-2 border-b">
                   {item.image ? (
-                    <img src={`http://your-laravel-api.com/storage/${item.image}`} alt="Equipment" className="h-12 w-12 object-cover rounded" />
+                    <img
+                      src={`http://your-laravel-api.com/storage/${item.image}`}
+                      alt="Equipment"
+                      className="h-12 w-12 object-cover rounded"
+                    />
                   ) : (
-                    'No Image'
+                    "No Image"
                   )}
                 </td>
                 <td className="px-4 py-2 border-b">
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2">Edit</button>
-                  <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                  <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2">
+                    Edit
+                  </button>
+                  <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
