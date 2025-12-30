@@ -100,10 +100,7 @@ const ProcurementDetails = ({ procurements }) => {
   if (!procurement) {
     return (
       <div className="space-y-6 p-6">
-        <Button
-          variant="outline"
-          onClick={() => navigate(-1)}
-        >
+        <Button variant="outline" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 dark:text-white w-4" />
           Back to Procurements
         </Button>
@@ -137,7 +134,11 @@ const ProcurementDetails = ({ procurements }) => {
 
   return (
     <div className="space-y-6 p-6">
-      <Button variant="outline" onClick={() => navigate(-1)} className="gap-2 text-gray-900 dark:text-white">
+      <Button
+        variant="outline"
+        onClick={() => navigate(-1)}
+        className="gap-2 text-gray-900 dark:text-white"
+      >
         <ArrowLeft className="h-4 w-4 text-gray-900 dark:text-white" />
         Back to Procurements
       </Button>
@@ -161,15 +162,27 @@ const ProcurementDetails = ({ procurements }) => {
               </CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" className="gap-2 bg-white dark:bg-gray-900 border dark:border-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-white dark:bg-gray-900 border dark:border-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
                 <Printer className="h-4 w-4 text-gray-900 dark:text-white" />
                 Print
               </Button>
-              <Button variant="outline" size="sm" className="gap-2 bg-white dark:bg-gray-900 border dark:border-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-white dark:bg-gray-900 border dark:border-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
                 <Download className="h-4 w-4 text-gray-900 dark:text-white" />
                 Export
               </Button>
-              <Button variant="outline" size="sm" className="gap-2 bg-white dark:bg-gray-900 border dark:border-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-white dark:bg-gray-900 border dark:border-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
                 <Share2 className="h-4 w-4 text-gray-900 dark:text-white" />
                 Share
               </Button>
@@ -272,13 +285,17 @@ const ProcurementDetails = ({ procurements }) => {
                   </p>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</h3>
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Phone
+                  </h3>
                   <p className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
                     {procurement?.supplier?.contact_phone}
                   </p>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Address</h3>
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Address
+                  </h3>
                   <p className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
                     {procurement?.supplier?.address}
                   </p>
@@ -318,10 +335,18 @@ const ProcurementDetails = ({ procurements }) => {
                 <Table>
                   <TableHeader className="bg-gray-50 dark:bg-gray-800">
                     <TableRow>
-                      <TableHead className="w-[40%] text-gray-900 dark:text-gray-100">Item</TableHead>
-                      <TableHead className="text-right text-gray-900 dark:text-gray-100">Quantity</TableHead>
-                      <TableHead className="text-right text-gray-900 dark:text-gray-100">Unit Cost</TableHead>
-                      <TableHead className="text-right text-gray-900 dark:text-gray-100">Total Cost</TableHead>
+                      <TableHead className="w-[40%] text-gray-900 dark:text-gray-100">
+                        Item
+                      </TableHead>
+                      <TableHead className="text-right text-gray-900 dark:text-gray-100">
+                        Quantity
+                      </TableHead>
+                      <TableHead className="text-right text-gray-900 dark:text-gray-100">
+                        Unit Cost
+                      </TableHead>
+                      <TableHead className="text-right text-gray-900 dark:text-gray-100">
+                        Total Cost
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -355,7 +380,10 @@ const ProcurementDetails = ({ procurements }) => {
                       );
                     })}
                     <TableRow className="bg-gray-50 dark:bg-gray-800 font-semibold">
-                      <TableCell colSpan={3} className="text-right text-gray-900 dark:text-gray-100">
+                      <TableCell
+                        colSpan={3}
+                        className="text-right text-gray-900 dark:text-gray-100"
+                      >
                         Subtotal
                       </TableCell>
                       <TableCell className="text-right text-gray-900 dark:text-gray-100">
@@ -368,7 +396,10 @@ const ProcurementDetails = ({ procurements }) => {
                       </TableCell>
                     </TableRow>
                     <TableRow className="bg-gray-50 dark:bg-gray-800 font-semibold">
-                      <TableCell colSpan={3} className="text-right text-gray-900 dark:text-gray-100">
+                      <TableCell
+                        colSpan={3}
+                        className="text-right text-gray-900 dark:text-gray-100"
+                      >
                         Logistics
                       </TableCell>
                       <TableCell className="text-right text-gray-900 dark:text-gray-100">
@@ -376,7 +407,10 @@ const ProcurementDetails = ({ procurements }) => {
                       </TableCell>
                     </TableRow>
                     <TableRow className="bg-pink-50 dark:bg-pink-900/20 font-bold">
-                      <TableCell colSpan={3} className="text-right text-gray-900 dark:text-gray-100">
+                      <TableCell
+                        colSpan={3}
+                        className="text-right text-gray-900 dark:text-gray-100"
+                      >
                         Total
                       </TableCell>
                       <TableCell className="text-right text-pink-600 dark:text-pink-400 text-gray-900 dark:text-gray-100">
@@ -432,27 +466,33 @@ const ProcurementDetails = ({ procurements }) => {
                         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Unit Cost
                         </h3>
-                        <p className="text-gray-900 dark:text-gray-100">{formatCurrency(parseFloat(equip?.unit_cost))}</p>
+                        <p className="text-gray-900 dark:text-gray-100">
+                          {formatCurrency(parseFloat(equip?.unit_cost))}
+                        </p>
                       </div>
                       <div className="space-y-1">
                         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Quantity
                         </h3>
                         <p className="text-gray-900 dark:text-gray-100">
-                          {equip.pivot.quantity} {equip.pivot.unit}
+                          {equip.pivot?.quantity} {equip.pivot?.unit}
                         </p>
                       </div>
                       <div className="space-y-1">
                         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Category
                         </h3>
-                        <p className="text-gray-900 dark:text-gray-100">{equip?.category || "N/A"}</p>
+                        <p className="text-gray-900 dark:text-gray-100">
+                          {equip?.category || "N/A"}
+                        </p>
                       </div>
                       <div className="space-y-1">
                         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Manufacturer
                         </h3>
-                        <p className="text-gray-900 dark:text-gray-100">{equip?.manufacturer || "N/A"}</p>
+                        <p className="text-gray-900 dark:text-gray-100">
+                          {equip?.manufacturer || "N/A"}
+                        </p>
                       </div>
                     </CardContent>
                   </Card>

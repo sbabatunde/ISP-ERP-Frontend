@@ -1,11 +1,11 @@
 import React from "react";
 import ProductTypeList from "@/components/list/tool-equipment-list";
-function EquipmentList() {
+function ToolList() {
   return (
     <>
-      <ProductTypeList type="equipment" />
+      <ProductTypeList type="tool" />
     </>
   );
 }
 
-export default EquipmentList;
+export default ToolList;

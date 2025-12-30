@@ -1,7 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createSupplier } from "../../api/axios";
-import { Camera, Upload, Loader2, Info, Phone, Mail, Globe, Users, Building, Link2, ArrowLeft } from "lucide-react";
+import {
+  Camera,
+  Upload,
+  Loader2,
+  Info,
+  Phone,
+  Mail,
+  Globe,
+  Users,
+  Building,
+  Link2,
+  ArrowLeft,
+} from "lucide-react";
 
 export default function SuppliersForm() {
   const [formData, setFormData] = useState({
@@ -31,11 +43,20 @@ export default function SuppliersForm() {
     setIsSubmitting(true);
 
     // Convert socials string to array
-    const socialsArray = formData.socials 
-      ? formData.socials.split(',').map(s => s.trim()).filter(s => s)
+    const socialsArray = formData.socials
+      ? formData.socials
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s)
       : [];
 
-    if(!formData.name || !formData.contact_name || !formData.contact_email || !formData.contact_phone || !formData.address) {
+    if (
+      !formData.name ||
+      !formData.contact_name ||
+      !formData.contact_email ||
+      !formData.contact_phone ||
+      !formData.address
+    ) {
       setError("Please fill all required fields");
       setIsSubmitting(false);
       return;
@@ -46,14 +67,16 @@ export default function SuppliersForm() {
       setSuccess("Supplier created successfully!");
       setTimeout(() => navigate("/suppliers-list"), 1500);
     } catch (error) {
-      setError(error.response?.data?.message || "Submission failed. Please try again.");
+      setError(
+        error.response?.data?.message || "Submission failed. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
   useEffect(() => {
-    if(success || error) {
+    if (success || error) {
       const timer = setTimeout(() => {
         setSuccess(null);
         setError(null);
@@ -65,7 +88,8 @@ export default function SuppliersForm() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 1024 * 1024) { // 1MB limit
+      if (file.size > 1024 * 1024) {
+        // 1MB limit
         setError("Image size must be less than 1MB");
         return;
       }
@@ -86,11 +110,15 @@ export default function SuppliersForm() {
             <Building className="h-5 w-5 text-pink-600 dark:text-pink-400" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Add New Supplier</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Enter supplier details below</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Add New Supplier
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Enter supplier details below
+            </p>
           </div>
         </div>
-        
+
         <button
           onClick={() => navigate("/suppliers-list")}
           className="px-4 py-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-pink-300 dark:bg-pink-700 hover:bg-pink-200 dark:hover:bg-pink-600 cursor-pointer rounded-lg transition-colors group"
@@ -105,15 +133,17 @@ export default function SuppliersForm() {
         {/* Profile Picture Section */}
         <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
           <header className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Profile Picture</h2>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+              Profile Picture
+            </h2>
           </header>
           <div className="flex flex-col items-center p-6 gap-4">
             <div className="relative group">
               <div className="w-32 h-32 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-pink-500 transition-colors duration-200">
                 {imagePreview ? (
-                  <img 
-                    src={imagePreview} 
-                    alt="Supplier preview" 
+                  <img
+                    src={imagePreview}
+                    alt="Supplier preview"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -125,14 +155,14 @@ export default function SuppliersForm() {
                   <Upload className="w-5 h-5 text-white" />
                 </div>
               </div>
-              <input 
-                type="file" 
+              <input
+                type="file"
                 onChange={handleImageChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 accept="image/jpeg,image/png"
               />
             </div>
-            
+
             <div className="text-center space-y-2 w-full max-w-xs">
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 JPG or PNG. Max size of 1MB
@@ -141,11 +171,11 @@ export default function SuppliersForm() {
                 <div className="px-4 py-2 bg-pink-50 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 rounded-lg hover:bg-pink-100 dark:hover:bg-pink-900/40 transition-colors duration-200 text-sm font-medium">
                   Upload New Photo
                 </div>
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   onChange={handleImageChange}
-                  className="hidden" 
-                  accept="image/jpeg,image/png" 
+                  className="hidden"
+                  accept="image/jpeg,image/png"
                 />
               </label>
             </div>
@@ -154,7 +184,10 @@ export default function SuppliersForm() {
 
         {/* Supplier Details Form */}
         <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <form onSubmit={handleSubmit} className="divide-y divide-gray-200 dark:divide-gray-700">
+          <form
+            onSubmit={handleSubmit}
+            className="divide-y divide-gray-200 dark:divide-gray-700"
+          >
             {/* Section 1: Basic Info */}
             <div className="p-6 space-y-5">
               <div className="flex items-center gap-3">
@@ -163,7 +196,7 @@ export default function SuppliersForm() {
                   Basic Information
                 </h2>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -176,7 +209,6 @@ export default function SuppliersForm() {
                     onChange={handleChange}
                     required
                     className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-1 focus:ring-pink-200 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
-                    
                   />
                 </div>
                 <div className="space-y-1">
@@ -190,7 +222,6 @@ export default function SuppliersForm() {
                     onChange={handleChange}
                     required
                     className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-pink-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
-             
                   />
                 </div>
               </div>
@@ -314,14 +345,22 @@ export default function SuppliersForm() {
 
             {/* Footer */}
             <div className="p-6 flex justify-end gap-4">
-              {error && <span className="text-red-500 text-sm mr-4">{error}</span>}
-              {success && <span className="text-green-500 text-sm mr-4">{success}</span>}
+              {error && (
+                <span className="text-red-500 text-sm mr-4">{error}</span>
+              )}
+              {success && (
+                <span className="text-green-500 text-sm mr-4">{success}</span>
+              )}
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="px-6 py-2 bg-pink-600 text-white rounded-lg font-semibold hover:bg-pink-700 transition-colors disabled:opacity-50"
               >
-                {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin inline-block" /> : "Add Supplier"}
+                {isSubmitting ? (
+                  <Loader2 className="w-5 h-5 animate-spin inline-block" />
+                ) : (
+                  "Add Supplier"
+                )}
               </button>
             </div>
           </form>

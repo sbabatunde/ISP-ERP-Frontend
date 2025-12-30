@@ -1,20 +1,25 @@
 import {
   Home,
-  BarChart2,
+  BarChart3,
   Clock,
   FileText,
   Users,
   ListChecks,
   PackagePlus,
-  ShoppingBag,
-  Package,
   Settings,
   PackageCheck,
-  Check,
-  FileChartColumnIncreasing,
+  CheckCircle,
   ScrollText,
-  MapPinPlusInside,
-  MapPinHouse,
+  Move,
+  MapPin,
+  Hourglass,
+  CheckSquare,
+  Store,
+  ClipboardList,
+  Wrench,
+  FileStack,
+  Truck,
+  Workflow,
 } from "lucide-react";
 
 export const navbarLinks = [
@@ -22,14 +27,14 @@ export const navbarLinks = [
     title: "Dashboard",
     links: [
       {
-        label: "Dashboard",
+        label: "Overview",
         path: "/",
         icon: Home,
       },
       {
         label: "Analytics",
         path: "/analytics",
-        icon: BarChart2,
+        icon: BarChart3,
       },
       {
         label: "Reports",
@@ -39,27 +44,107 @@ export const navbarLinks = [
     ],
   },
   {
-    title: "Purchase",
+    title: "Procurement",
     links: [
       {
-        label: "Completed",
-        path: "/completed-purchase",
-        icon: Check,
+        label: "Requisitions",
+        children: [
+          {
+            label: "Create Requisition",
+            path: "/requisition-form",
+            icon: FileStack,
+          },
+          {
+            label: "Pending Requisitions",
+            path: "/pending-requisitions",
+            icon: Hourglass,
+          },
+          {
+            label: "Approved Requisitions",
+            path: "/approved-requisitions",
+            icon: CheckSquare,
+          },
+        ],
       },
       {
-        label: "Pending",
-        path: "/pending-purchase",
-        icon: Clock,
+        label: "Purchase Orders",
+        children: [
+          {
+            label: "Create Voucher",
+            path: "/voucher-form",
+            icon: ScrollText,
+          },
+          {
+            label: "Pending Orders",
+            path: "/pending-purchase",
+            icon: Clock,
+          },
+          {
+            label: "Completed Orders",
+            path: "/completed-purchase",
+            icon: CheckCircle,
+          },
+        ],
       },
       {
-        label: "Raise Voucher",
-        path: "/voucher-form",
-        icon: ScrollText,
+        label: "Procurement Form",
+        path: "/procurement",
+        icon: FileStack,
+      },
+    ],
+  },
+  {
+    title: "Inventory",
+    links: [
+      {
+        label: "Equipment",
+        children: [
+          {
+            label: "Add Equipment",
+            path: "/equipment-form",
+            icon: PackagePlus,
+          },
+          {
+            label: "Equipment Types",
+            path: "/equipment-type-form",
+            icon: PackageCheck,
+          },
+          {
+            label: "Equipment Type List",
+            path: "/equipment-type-list",
+            icon: ClipboardList,
+          },
+          {
+            label: "Equipment List",
+            path: "/equipment-list",
+            icon: ClipboardList,
+          },
+        ],
       },
       {
-        label: "Raise Requisition",
-        path: "/requisition-form",
-        icon: FileChartColumnIncreasing,
+        label: "Tools",
+        children: [
+          {
+            label: "Add Tool",
+            path: "/tool-form",
+            icon: Wrench,
+          },
+          {
+            label: "Tool Types",
+            path: "/tool-type-form",
+            icon: Wrench,
+          },
+          {
+            label: "Tool Type List",
+            path: "/tool-type-list",
+            icon: ListChecks,
+          },
+          {
+            label: "Tool List",
+            path: "/tool-list",
+            icon: ListChecks,
+          },
+        ],
       },
     ],
   },
@@ -67,49 +152,29 @@ export const navbarLinks = [
     title: "Suppliers",
     links: [
       {
-        label: "Suppliers Form",
+        label: "Add Supplier",
         path: "/supplier",
         icon: Users,
       },
       {
-        label: "Suppliers List",
+        label: "Supplier List",
         path: "/suppliers-list",
         icon: ListChecks,
       },
     ],
   },
   {
-    title: "Equipment",
+    title: "Storage",
     links: [
       {
-        label: "Equipment Form",
-        path: "/equipment-form",
-        icon: PackagePlus,
+        label: "Stores",
+        path: "/store-list",
+        icon: Store,
       },
       {
-        label: "Procurement Form",
-        path: "/procurement-form",
-        icon: ShoppingBag,
-      },
-      {
-        label: "Equipment Type Form",
-        path: "/equipment-type-form",
-        icon: Package,
-      },
-    ],
-  },
-  {
-    title: "Products",
-    links: [
-      {
-        label: "Products",
-        path: "/products",
-        icon: Package,
-      },
-      {
-        label: "Equipment Type",
-        path: "/equipment-type-list",
-        icon: PackageCheck,
+        label: "Locations",
+        path: "/location",
+        icon: MapPin,
       },
     ],
   },
@@ -119,33 +184,62 @@ export const navbarLinks = [
       {
         label: "Equipment Movement",
         path: "/equipment-movement",
-        icon: MapPinPlusInside,
+        icon: Truck,
       },
       {
-        label: "Location",
-        path: "/location",
-        icon: MapPinHouse,
+        label: "Movement History",
+        path: "/movement-history",
+        icon: Move,
       },
     ],
   },
   {
-    title: "Store",
+    title: "Repair",
     links: [
       {
-        label: "Store List",
-        path: "/store-list",
-        icon: ListChecks,
+        label: "Repairs",
+        path: "/repair",
+        icon: Wrench,
+      },
+      {
+        label: "Repairs List",
+        path: "/repair-list",
+        icon: Wrench,
       },
     ],
   },
-
   {
-    title: "Settings",
+    title: "Workflow",
     links: [
       {
-        label: "settings",
+        label: "Pending Tasks",
+        path: "/pending-workflow",
+        icon: Hourglass,
+      },
+      {
+        label: "Completed Tasks",
+        path: "/completed-workflow",
+        icon: CheckSquare,
+      },
+      {
+        label: "Workflow Status",
+        path: "/workflow-status",
+        icon: Workflow,
+      },
+    ],
+  },
+  {
+    title: "Administration",
+    links: [
+      {
+        label: "Settings",
         path: "/settings",
         icon: Settings,
+      },
+      {
+        label: "Audit Log",
+        path: "/audit-log",
+        icon: FileText,
       },
     ],
   },

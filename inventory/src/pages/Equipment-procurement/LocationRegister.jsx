@@ -25,15 +25,20 @@ import { fetchLocations, createLocation } from "@/api/axios";
 
 const Location = () => {
   const [locations, setLocations] = useState([]);
+  console.log(locations);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    async function getLocation() {
-      setLoading(true);
-      const data = await fetchLocations();
-      setLocations(data);
-      setLoading(false);
+    try {
+      async function getLocation() {
+        setLoading(true);
+        const response = await fetchLocations();
+        setLocations(response.data);
+        setLoading(false);
+      }
+      getLocation();
+    } catch (error) {
+      console.error(error);
     }
-    getLocation();
   }, []);
 
   const [newLocation, setNewLocation] = useState({

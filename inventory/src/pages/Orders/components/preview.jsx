@@ -67,6 +67,7 @@ function Preview({ procurement }) {
         className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-md print:p-2 print:shadow-none print:max-w-full"
       >
         {/* Header Section */}
+
         <div className="mb-6 border-b pb-4 print:mb-4 print:pb-2">
           <h1 className="text-2xl font-bold text-center text-gray-800 print:text-xl">
             SYSCODES COMMUNICATIONS LIMITED
@@ -75,7 +76,6 @@ function Preview({ procurement }) {
             Requisition Form
           </h3>
         </div>
-
         {/* Supplier and Delivery Info */}
         <div className="grid grid-cols-2 gap-6 mb-6 print:gap-4 print:mb-4">
           <section className="space-y-4 print:space-y-2">
@@ -160,7 +160,6 @@ function Preview({ procurement }) {
             </div>
           </section>
         </div>
-
         {/* Requisition Details */}
         <div className="mb-6 print:mb-4">
           <p className="font-medium text-gray-700 text-base mb-4 print:text-sm print:mb-2">

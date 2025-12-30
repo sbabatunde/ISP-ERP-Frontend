@@ -233,7 +233,7 @@ function Page({ title, orders, loading }) {
                       >
                         <Eye className="h-4 w-4 text-pink-600 dark:text-gray-300" />
                       </Button>
-                      {order.status === "pending" && (
+                      {order.status && (
                         <>
                           <div className="relative group">
                             {/* Tooltip */}

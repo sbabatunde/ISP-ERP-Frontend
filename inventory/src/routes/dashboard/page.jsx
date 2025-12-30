@@ -47,93 +47,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { fetchAllProcurements, fetchEquipmentList } from "@/api/axios";
+import {
+  fetchAllProcurements,
+  fetchEquipmentList,
+  fetchDashboardStats,
+} from "@/api/axios";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const testData = {
-  kpis: {
-    totalInventoryValue: "₦1,250,000",
-    totalItemsInStore: 2350,
-    pendingProcurements: 200,
-    pendingRetrievals: 28,
-    lowStockItems: 42,
-    outOfStockItems: 12,
-  },
-  monthlyInventoryFlow: [
-    { name: "Jan", Installation: 78000, Procurement: 103591, Retrieval: 45000 },
-    { name: "Feb", Installation: 94033, Procurement: 106650, Retrieval: 52000 },
-    {
-      name: "Mar",
-      Installation: 237000,
-      Procurement: 101850,
-      Retrieval: 68000,
-    },
-    { name: "Apr", Installation: 80020, Procurement: 222800, Retrieval: 42000 },
-    {
-      name: "May",
-      Installation: 120500,
-      Procurement: 185600,
-      Retrieval: 55000,
-    },
-    { name: "Jun", Installation: 95000, Procurement: 165000, Retrieval: 48000 },
-  ],
-  recentActivity: [
-    {
-      id: 1,
-      date: "2023-11-20",
-      description: "TP-Link Router (OUT)",
-      quantity: 5,
-      location: "Ikeja 1",
-      type: "outgoing",
-    },
-    {
-      id: 2,
-      date: "2023-11-19",
-      description: "LBE AC GEN 2 LR (RETRIEVE)",
-      quantity: 1,
-      location: "Ajah 2",
-      type: "retrieval",
-    },
-    {
-      id: 3,
-      date: "2023-11-18",
-      description: "Outdoor Cable (PURCHASE)",
-      quantity: 50,
-      location: "Store",
-      type: "incoming",
-    },
-    {
-      id: 4,
-      date: "2023-11-17",
-      description: "Fiber Optic Cable (OUT)",
-      quantity: 10,
-      location: "Victoria Island",
-      type: "outgoing",
-    },
-    {
-      id: 5,
-      date: "2023-11-16",
-      description: "Network Switch (RETRIEVE)",
-      quantity: 2,
-      location: "Lekki 1",
-      type: "retrieval",
-    },
-  ],
-  inventoryDistribution: [
-    { name: "IT", value: 35 },
-    { name: "FIBER", value: 25 },
-    { name: "SUPPORT", value: 20 },
-    { name: "NETWORKING", value: 15 },
-    { name: "POWER", value: 5 },
-  ],
-  topProducts: [
-    { name: "TP-Link Router", stock: 245, trend: "up" },
-    { name: "Ethernet Cable", stock: 189, trend: "up" },
-    { name: "Fiber Optic Cable", stock: 142, trend: "down" },
-    { name: "Network Switch", stock: 98, trend: "up" },
-    { name: "Power Adapter", stock: 76, trend: "down" },
-  ],
-};
 
 const COLORS = [
   "#0088FE",
@@ -146,7 +65,8 @@ const COLORS = [
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
+  const [data, setdata] = useState(null);
+  console.log(data);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState({
     from: "",
@@ -159,28 +79,36 @@ const DashboardPage = () => {
   const [storeItems, setStoreItems] = useState();
 
   useEffect(() => {
-    // Simulate API fetch
-    setData(testData);
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const handleDashboard = async () => {
       try {
-        const [procurements, equipment] = await Promise.all([
-          fetchAllProcurements(),
-          fetchEquipmentList(),
-        ]);
-        setApproved(procurements.filter((item) => item.status === "approved"));
-        setPending(procurements.filter((item) => item.status === "pending"));
-        setStoreItems(equipment);
-        setLoading(false);
+        const data = await fetchDashboardStats();
+        console.log(data);
+        setdata(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
+        console.log(error);
       }
     };
-    fetchData();
+    handleDashboard();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchdata? = async () => {
+  //     try {
+  //       const [procurements, equipment] = await Promise.all([
+  //         fetchAllProcurements(),
+  //         fetchEquipmentList(),
+  //       ]);
+  //       setApproved(procurements.filter((item) => item.status === "approved"));
+  //       setPending(procurements.filter((item) => item.status === "pending"));
+  //       setStoreItems(equipment);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching data?:", error);
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchdata?();
+  // }, []);
 
   const handleDateChange = (e, type) => {
     setDateRange((prev) => ({
@@ -282,18 +210,18 @@ const DashboardPage = () => {
   }, [timeRange]);
   console.log(loading);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-950 dark:to-slate-900 p-6">
-        <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="h-8 w-8 text-pink-600 animate-spin" />
-          <p className="text-gray-900 dark:text-white text-lg">
-            Loading dashboard data...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-950 dark:to-slate-900 p-6">
+  //       <div className="flex flex-col items-center gap-4">
+  //         <RefreshCw className="h-8 w-8 text-pink-600 animate-spin" />
+  //         <p className="text-gray-900 dark:text-white text-lg">
+  //           Loading dashboard data?...
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-950 dark:to-slate-900 p-6">
@@ -397,8 +325,8 @@ const DashboardPage = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">
-              {data?.kpis?.totalInventoryValue}
+            <div className="text-md font-bold text-gray-900 dark:text-white">
+              {data?.performanceIndicator.totalInventoryValue}
             </div>
             <p className="text-xs text-green-600 dark:text-green-400 mt-1 flex items-center">
               <ArrowUp className="h-3 w-3 mr-1" /> +5.2% from last month
@@ -420,7 +348,7 @@ const DashboardPage = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
-              {storeItems?.length || (
+              {data?.performanceIndicator.totalItemsInStore || (
                 <Skeleton className="h-8 w-16 bg-gray-200 dark:bg-slate-700" />
               )}
             </div>
@@ -444,7 +372,7 @@ const DashboardPage = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
-              {pending?.length || (
+              {data?.performanceIndicator.pendingProcurements || (
                 <Skeleton className="h-8 w-16 bg-gray-200 dark:bg-slate-700" />
               )}
             </div>
@@ -468,7 +396,7 @@ const DashboardPage = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
-              {data?.kpis?.pendingRetrievals}
+              {data?.performanceIndicator.pendingRetrievals}
             </div>
             <p className="text-xs text-green-600 dark:text-green-400 mt-1 flex items-center">
               <ArrowUp className="h-3 w-3 mr-1" /> +3 from yesterday
@@ -487,7 +415,7 @@ const DashboardPage = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
-              {data?.kpis?.lowStockItems}
+              {data?.performanceIndicator.lowStockItems}
             </div>
             <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
               Needs attention
@@ -506,7 +434,7 @@ const DashboardPage = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
-              {data?.kpis?.outOfStockItems}
+              {data?.performanceIndicator.outOfStockItems}
             </div>
             <p className="text-xs text-red-600 dark:text-red-400 mt-1">
               Urgent restock needed
@@ -515,7 +443,7 @@ const DashboardPage = () => {
         </Card>
       </div>
 
-      {/* Location Data */}
+      {/* Location data? */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {[
           { name: "IBADAN OFFICE", value: "₦350,000", items: 750 },
@@ -571,30 +499,30 @@ const DashboardPage = () => {
         ))}
       </div>
 
-      {/* Charts and Data Visualization */}
+      {/* Charts and data? Visualization */}
       <Tabs defaultValue="inventory" className="mb-8">
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-6 bg-gray-100 dark:bg-slate-800 p-1 rounded-lg">
           <TabsTrigger
             value="inventory"
-            className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:dark:bg-slate-900 rounded-md transition-all"
+            className="data?-[state=active]:bg-white data?-[state=active]:shadow-sm data?-[state=active]:dark:bg-slate-900 rounded-md transition-all"
           >
             Inventory Flow
           </TabsTrigger>
           <TabsTrigger
             value="distribution"
-            className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:dark:bg-slate-900 rounded-md transition-all"
+            className="data?-[state=active]:bg-white data?-[state=active]:shadow-sm data?-[state=active]:dark:bg-slate-900 rounded-md transition-all"
           >
             Distribution
           </TabsTrigger>
           <TabsTrigger
             value="products"
-            className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:dark:bg-slate-900 rounded-md transition-all"
+            className="data?-[state=active]:bg-white data?-[state=active]:shadow-sm data?-[state=active]:dark:bg-slate-900 rounded-md transition-all"
           >
             Top Products
           </TabsTrigger>
           <TabsTrigger
             value="activity"
-            className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:dark:bg-slate-900 rounded-md transition-all"
+            className="data?-[state=active]:bg-white data?-[state=active]:shadow-sm data?-[state=active]:dark:bg-slate-900 rounded-md transition-all"
           >
             Recent Activity
           </TabsTrigger>
@@ -615,7 +543,7 @@ const DashboardPage = () => {
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
-                    data={data.monthlyInventoryFlow}
+                    data={data?.monthlyInventoryFlow}
                     margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                   >
                     <CartesianGrid
@@ -670,7 +598,7 @@ const DashboardPage = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={data.inventoryDistribution}
+                      data={data?.inventoryDistribution}
                       cx="50%"
                       cy="50%"
                       innerRadius={60}
@@ -682,7 +610,7 @@ const DashboardPage = () => {
                       }
                       labelLine={false}
                     >
-                      {data.inventoryDistribution.map((entry, index) => (
+                      {data?.locations.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={COLORS[index % COLORS.length]}
@@ -716,7 +644,7 @@ const DashboardPage = () => {
             </CardHeader>
             <CardContent className="pt-6">
               <div className="space-y-4">
-                {data.topProducts.map((product, index) => (
+                {data?.topProducts.map((product, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-slate-700/30 hover:bg-gray-100 dark:hover:bg-slate-700/50 transition-colors duration-200"
@@ -793,7 +721,7 @@ const DashboardPage = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
-                    {data.recentActivity.map((activity) => (
+                    {data?.recentActivity.map((activity) => (
                       <tr
                         key={activity.id}
                         className="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-150"

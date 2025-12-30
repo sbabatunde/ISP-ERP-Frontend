@@ -1,10 +1,29 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   fetchSuppliersList,
   fetchEquipmentList,
   createProcurement,
+  fetchEquipmentByLocation,
 } from "../../api/axios";
 import { MdEdit, MdDelete } from "react-icons/md";
+import {
+  Plus,
+  X,
+  ShoppingCart,
+  Calendar,
+  Truck,
+  Calculator,
+  Package,
+  FileText,
+  User,
+  Save,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  Search,
+  ChevronDown,
+} from "lucide-react";
 
 export default function EquipmentProcurementForm() {
   const [formData, setFormData] = useState({
@@ -14,7 +33,7 @@ export default function EquipmentProcurementForm() {
     total_cost: 0,
     equipment: [],
   });
-  console.log(formData);
+
   const [equipmentPanel, setEquipmentPanel] = useState({
     isOpen: false,
     data: {
@@ -37,24 +56,48 @@ export default function EquipmentProcurementForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Search state for equipment type dropdown
+  const [equipmentSearch, setEquipmentSearch] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const [equipmentData, suppliersData] = await Promise.all([
-          fetchEquipmentList(),
-          fetchSuppliersList(),
-        ]);
-        setEquipmentTypes(equipmentData);
-        setSuppliers(suppliersData);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch data");
-      } finally {
-        setIsLoading(false);
-      }
+      const [suppliersData, equipmentData] = await Promise.all([
+        fetchSuppliersList(),
+        fetchEquipmentList(),
+      ]);
+      setEquipmentTypes(equipmentData);
+      setSuppliers(suppliersData);
     };
+    setIsLoading(false);
     fetchData();
   }, []);
+
+  // Filter equipment types based on search
+  const filteredEquipmentTypes = equipmentTypes.filter(
+    (equipment) =>
+      equipment.name.toLowerCase().includes(equipmentSearch.toLowerCase()) ||
+      equipment.model.toLowerCase().includes(equipmentSearch.toLowerCase()) ||
+      equipment.equipment_type?.name
+        .toLowerCase()
+        .includes(equipmentSearch.toLowerCase()),
+  );
+
+  const handleEquipmentSelect = (equipmentId) => {
+    const selectedEquipment = equipmentTypes.find(
+      (eq) => eq.id === equipmentId,
+    );
+    setEquipmentPanel((prev) => ({
+      ...prev,
+      data: {
+        ...prev.data,
+        id: equipmentId,
+        model_number: selectedEquipment?.model || "",
+      },
+    }));
+    setEquipmentSearch("");
+    setIsDropdownOpen(false);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,7 +108,6 @@ export default function EquipmentProcurementForm() {
     setEquipmentPanel((prev) => {
       const newData = { ...prev.data, [name]: value };
 
-      // Auto-calculate total cost when unit cost changes
       if (name === "unit_cost") {
         const quantity = prev.data.serial_numbers.length;
         return {
@@ -123,9 +165,7 @@ export default function EquipmentProcurementForm() {
       return;
     }
 
-    // Calculate quantity based on serial numbers length
     const quantity = equipmentPanel.data.serial_numbers.length;
-
     const newEquipment = {
       ...equipmentPanel.data,
       quantity: quantity,
@@ -134,13 +174,10 @@ export default function EquipmentProcurementForm() {
     };
 
     let updatedEquipment;
-
     if (equipmentPanel.editIndex !== null) {
-      // Editing existing equipment
       updatedEquipment = [...formData.equipment];
       updatedEquipment[equipmentPanel.editIndex] = newEquipment;
     } else {
-      // Adding new equipment
       updatedEquipment = [...formData.equipment, newEquipment];
     }
 
@@ -157,7 +194,6 @@ export default function EquipmentProcurementForm() {
       total_cost: newTotalCost + Number(formData.logistics || 0),
     });
 
-    // Reset equipment panel
     setEquipmentPanel({
       isOpen: true,
       data: {
@@ -190,6 +226,8 @@ export default function EquipmentProcurementForm() {
       editIndex: null,
     });
     setError(null);
+    setEquipmentSearch("");
+    setIsDropdownOpen(false);
   };
 
   const openAddEquipmentPanel = () => {
@@ -207,6 +245,8 @@ export default function EquipmentProcurementForm() {
       },
       editIndex: null,
     });
+    setEquipmentSearch("");
+    setIsDropdownOpen(false);
   };
 
   const openEditEquipmentPanel = (index) => {
@@ -216,6 +256,8 @@ export default function EquipmentProcurementForm() {
       data: equipmentToEdit,
       editIndex: index,
     });
+    setEquipmentSearch("");
+    setIsDropdownOpen(false);
   };
 
   useEffect(() => {
@@ -256,9 +298,7 @@ export default function EquipmentProcurementForm() {
     setIsSubmitting(true);
 
     try {
-      console.log(formData);
       await createProcurement(formData);
-
       setSuccess("Procurement created successfully!");
       setFormData({
         supplier_id: "",
@@ -301,73 +341,98 @@ export default function EquipmentProcurementForm() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-pink-600 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading procurement data...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col lg:flex-row w-full min-h-screen">
+    <div className="flex flex-col lg:flex-row w-full min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Main Form Content */}
       <div
         className={`w-full ${equipmentPanel.isOpen ? "lg:w-2/3" : "lg:w-full"} transition-all duration-300`}
       >
-        <div className="p-4">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-pink-100 dark:bg-indigo-900/50 p-2 rounded-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-pink-600 dark:text-indigo-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                />
-              </svg>
+        <div className="p-4 sm:p-6">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-3 mb-6"
+          >
+            <div className="p-2 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl shadow-lg">
+              <ShoppingCart className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold dark:text-white">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 New Equipment Procurement
               </h1>
-              <p className="text-sm text-slate-500 dark:text-white">
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
                 Add a new procurement record
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+          {/* Success/Error Messages */}
+          <AnimatePresence>
+            {success && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2"
+              >
+                <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <span className="text-green-800 dark:text-green-300 text-sm">
+                  {success}
+                </span>
+              </motion.div>
+            )}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2"
+              >
+                <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                <span className="text-red-800 dark:text-red-300 text-sm">
+                  {error}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden"
+          >
             <form
               onSubmit={handleSubmit}
-              className="divide-y divide-slate-200 dark:divide-slate-700"
+              className="divide-y divide-gray-200 dark:divide-gray-700"
             >
-              {/* Section 1: Basic Info */}
-              <div className="p-5 space-y-4">
-                <h2 className="font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Basic Information
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm mb-2 text-slate-600 dark:text-white">
+              {/* Basic Information Section */}
+              <div className="p-4 sm:p-6 space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                    <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                    Basic Information
+                  </h2>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                      <User className="h-3 w-3 inline mr-1" />
                       Supplier*
                     </label>
                     <select
@@ -375,7 +440,7 @@ export default function EquipmentProcurementForm() {
                       value={formData.supplier_id}
                       onChange={handleChange}
                       required
-                      className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
                     >
                       <option value="">Select Supplier</option>
                       {suppliers.map((supplier) => (
@@ -385,8 +450,10 @@ export default function EquipmentProcurementForm() {
                       ))}
                     </select>
                   </div>
-                  <div>
-                    <label className="block text-sm mb-2 text-slate-600 dark:text-white">
+
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                      <Calendar className="h-3 w-3 inline mr-1" />
                       Procurement Date*
                     </label>
                     <input
@@ -395,563 +462,586 @@ export default function EquipmentProcurementForm() {
                       value={formData.procurement_date}
                       onChange={handleChange}
                       required
-                      className="w-full px-3 py-2 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-900 dark:text-white"
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm mb-2 text-slate-600 dark:text-white">
+
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                      <Truck className="h-3 w-3 inline mr-1" />
                       Logistics Cost
                     </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-white">
-                        ₦
-                      </span>
-                      <input
-                        type="number"
-                        name="logistics"
-                        value={formData.logistics}
-                        onChange={handleChange}
-                        className="w-full pl-8 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100"
-                      />
-                    </div>
+                    <input
+                      type="number"
+                      name="logistics"
+                      value={formData.logistics}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                    />
                   </div>
-                  <div>
-                    <label className="block text-sm mb-2 text-slate-600 dark:text-white">
+
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                      <Calculator className="h-3 w-3 inline mr-1" />
                       Total Cost
                     </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-white">
-                        ₦
-                      </span>
-                      <input
-                        type="text"
-                        name="total_cost"
-                        maxLength={10}
-                        value={
-                          formData.total_cost
-                            ? `₦${parseFloat(formData.total_cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                            : ""
-                        }
-                        readOnly
-                        className="w-full pl-8 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      readOnly
+                      value={
+                        formData.total_cost
+                          ? `₦${parseFloat(formData.total_cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                          : ""
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-white cursor-not-allowed font-medium"
+                    />
                   </div>
                 </div>
               </div>
 
-              {/* Section 2: Equipment List */}
-              <div className="p-5 space-y-4">
-                <div className="flex justify-between items-center">
-                  <h2 className="font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                      />
-                    </svg>
-                    Equipment List
-                  </h2>
-                  <button
+              {/* Equipment List Section */}
+              <div className="p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                      <Package className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                      Equipment List
+                    </h2>
+                    {formData.equipment.length > 0 && (
+                      <span className="px-2 py-0.5 bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300 rounded-full text-xs font-medium">
+                        {formData.equipment.length} items
+                      </span>
+                    )}
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     type="button"
                     onClick={openAddEquipmentPanel}
-                    className="inline-flex items-center px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
+                    className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
+                    <Plus className="h-4 w-4" />
                     {equipmentPanel.isOpen ? "Close Panel" : "Add Equipment"}
-                  </button>
+                  </motion.button>
                 </div>
+
                 {formData.equipment.length > 0 ? (
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                      <thead className="bg-gray-50 dark:bg-gray-700">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Model
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Serial Numbers
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Unit Cost
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Qty
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Total Cost
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            Actions
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        {formData.equipment.map((item, index) => (
-                          <tr key={index}>
-                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                              {item.model_number}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                              <div className="flex flex-wrap gap-1 max-w-xs">
-                                {item.serial_numbers
-                                  .slice(0, 3)
-                                  .map((sn, i) => (
-                                    <span
-                                      key={i}
-                                      className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-bold"
-                                    >
-                                      {sn}
-                                    </span>
-                                  ))}
-                                {item.serial_numbers.length > 3 && (
-                                  <span className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-xs">
-                                    +{item.serial_numbers.length - 3} more
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                              ₦{parseFloat(item.unit_cost).toLocaleString()}
-                            </td>
-                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                              {item.serial_numbers.length} {item.unit}
-                            </td>
-                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                              ₦
-                              {parseFloat(
-                                item.total_cost_equipment,
-                              ).toLocaleString()}
-                            </td>
-                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                              <div className="flex gap-3 items-center">
-                                <button
-                                  type="button"
-                                  onClick={() => openEditEquipmentPanel(index)}
-                                  className="cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-2xl dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300"
-                                >
-                                  <MdEdit className="w-5 h-5 hover:text-indigo-900 dark:hover:text-indigo-300 hover:scale-110 transition-all duration-300" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleDelete(index)}
-                                  className="cursor-pointer text-red-600 bg-red-100 p-2 rounded-2xl dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
-                                >
-                                  <MdDelete className="w-5 h-5 hover:text-red-900 dark:hover:text-red-300 hover:scale-110 transition-all duration-300" />
-                                </button>
-                              </div>
-                            </td>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead className="bg-gray-50 dark:bg-gray-700/50">
+                          <tr>
+                            <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                              Model
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                              Serial Numbers
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                              Unit Cost
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                              Qty
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                              Total Cost
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                              Actions
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                          {formData.equipment.map((item, index) => (
+                            <motion.tr
+                              key={index}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors duration-150"
+                            >
+                              <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                {item.model_number}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
+                                <div className="flex flex-wrap gap-1 max-w-xs">
+                                  {item.serial_numbers
+                                    .slice(0, 3)
+                                    .map((sn, i) => (
+                                      <span
+                                        key={i}
+                                        className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono border border-gray-200 dark:border-gray-600"
+                                      >
+                                        {sn}
+                                      </span>
+                                    ))}
+                                  {item.serial_numbers.length > 3 && (
+                                    <span className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-600 rounded text-xs border border-gray-300 dark:border-gray-500">
+                                      +{item.serial_numbers.length - 3} more
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">
+                                ₦{parseFloat(item.unit_cost).toLocaleString()}
+                              </td>
+                              <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                {item.serial_numbers.length} {item.unit}
+                              </td>
+                              <td className="px-4 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">
+                                ₦
+                                {parseFloat(
+                                  item.total_cost_equipment,
+                                ).toLocaleString()}
+                              </td>
+                              <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                <div className="flex gap-1">
+                                  <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    type="button"
+                                    onClick={() =>
+                                      openEditEquipmentPanel(index)
+                                    }
+                                    className="p-1.5 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors duration-200 border border-blue-100 dark:border-blue-800"
+                                  >
+                                    <MdEdit className="w-3.5 h-3.5" />
+                                  </motion.button>
+                                  <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    type="button"
+                                    onClick={() => handleDelete(index)}
+                                    className="p-1.5 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 rounded hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors duration-200 border border-red-100 dark:border-red-800"
+                                  >
+                                    <MdDelete className="w-3.5 h-3.5" />
+                                  </motion.button>
+                                </div>
+                              </td>
+                            </motion.tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 ) : (
-                  <div className="text-center py-6 bg-gray-50 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-                    <p className="text-gray-500 dark:text-white">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-8 bg-gray-50 dark:bg-gray-700/30 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600"
+                  >
+                    <Package className="h-8 w-8 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
                       No equipment added yet
                     </p>
-                  </div>
+                    <p className="text-gray-400 dark:text-gray-500 text-xs mt-0.5">
+                      Click "Add Equipment" to get started
+                    </p>
+                  </motion.div>
                 )}
               </div>
 
               {/* Form Footer */}
-              <div className="p-5 bg-slate-50 dark:bg-slate-800/30 flex flex-col sm:flex-row justify-between gap-3">
-                <div className="space-y-1">
-                  {error && (
-                    <div className="text-red-600 dark:text-red-400 text-sm flex items-center gap-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {error}
-                    </div>
-                  )}
-                  {success && (
-                    <div className="text-emerald-600 dark:text-emerald-400 text-sm flex items-center gap-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {success}
-                    </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-800/30 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  {formData.equipment.length > 0 ? (
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle className="h-3.5 w-3.5 text-green-600" />
+                      Ready to submit {formData.equipment.length} equipment
+                      items
+                    </span>
+                  ) : (
+                    "Add at least one equipment item to submit"
                   )}
                 </div>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={isSubmitting || formData.equipment.length === 0}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg text-white flex items-center justify-center gap-2 min-w-[120px] ${
+                  className={`px-6 py-2 text-white text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-1.5 min-w-[140px] justify-center ${
                     isSubmitting
-                      ? "bg-pink-500 opacity-75 cursor-not-allowed"
+                      ? "bg-gray-400 cursor-not-allowed"
                       : formData.equipment.length === 0
                         ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-pink-600 hover:bg-pink-700"
+                        : "bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 shadow-sm hover:shadow"
                   }`}
                 >
                   {isSubmitting ? (
                     <>
-                      <svg
-                        className="animate-spin h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
                       Saving...
                     </>
                   ) : (
-                    "Submit Procurement"
+                    <>
+                      <Save className="h-3.5 w-3.5" />
+                      Submit Procurement
+                    </>
                   )}
-                </button>
+                </motion.button>
               </div>
             </form>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Equipment Side Panel */}
-      <div
-        className={`fixed lg:relative inset-y-0 right-0 w-full lg:w-1/3 bg-white dark:bg-slate-800 shadow-xl transform ${
-          equipmentPanel.isOpen
-            ? "translate-x-0"
-            : "translate-x-full lg:translate-x-0 lg:hidden"
-        } transition-transform duration-300 ease-in-out z-20 border-l border-gray-200 dark:border-gray-700`}
-      >
-        <div className="h-full flex flex-col">
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {equipmentPanel.editIndex !== null
-                ? "Edit Equipment"
-                : "Add Equipment"}
-            </h3>
-            <button
+      <AnimatePresence>
+        {equipmentPanel.isOpen && (
+          <>
+            {/* Overlay for mobile */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-10 lg:hidden"
               onClick={closeEquipmentPanel}
-              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
+            />
+
+            {/* Side Panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className={`fixed lg:relative inset-y-0 right-0 w-full lg:w-1/3 bg-white dark:bg-gray-800 shadow-xl z-20 border-l border-gray-200 dark:border-gray-700`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {error && (
-              <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-300 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Equipment Type*
-                </label>
-                <select
-                  name="id"
-                  value={equipmentPanel.data.id}
-                  onChange={handleEquipmentChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  required
-                  disabled={equipmentPanel.editIndex !== null}
-                >
-                  <option value="">Select Equipment Type</option>
-                  {equipmentTypes.map((eqType) => (
-                    <option key={eqType.id} value={eqType.id}>
-                      {eqType.name} ({eqType.equipment_type?.type || "N/A"})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Model Number
-                  </label>
-                  <input
-                    type="text"
-                    name="model_number"
-                    value={equipmentPanel.data.model_number}
-                    readOnly
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-not-allowed"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Unit*
-                  </label>
-                  <select
-                    name="unit"
-                    value={equipmentPanel.data.unit}
-                    onChange={handleEquipmentChange}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    required
-                  >
-                    <option value="">Select Unit</option>
-                    <option value="pcs">PCS</option>
-                    <option value="sets">SETS</option>
-                    <option value="kgs">KG</option>
-                    <option value="liters">LTR</option>
-                    <option value="meters">MTR</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Unit Cost (₦)*
-                  </label>
-                  <input
-                    type="number"
-                    name="unit_cost"
-                    value={equipmentPanel.data.unit_cost}
-                    onChange={handleEquipmentChange}
-                    min="0"
-                    step="0.01"
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Quantity*
-                  </label>
-                  <input
-                    type="number"
-                    readOnly
-                    name="quantity"
-                    value={equipmentPanel.data.serial_numbers.length}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-not-allowed"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Total Equipment Cost (₦)
-                </label>
-                <input
-                  type="text"
-                  name="total_cost_equipment"
-                  value={
-                    equipmentPanel.data.total_cost_equipment
-                      ? `₦${parseFloat(equipmentPanel.data.total_cost_equipment).toLocaleString()}`
-                      : ""
-                  }
-                  readOnly
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-not-allowed"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Serial Numbers*
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    name="current_serial_number"
-                    value={equipmentPanel.data.current_serial_number}
-                    onChange={handleEquipmentChange}
-                    onKeyDown={handleKeyDown}
-                    className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    placeholder="Enter serial number and press Enter"
-                  />
-                  <button
-                    type="button"
-                    onClick={addSerialNumber}
-                    disabled={!equipmentPanel.data.current_serial_number.trim()}
-                    className={`px-4 py-2 text-white rounded-lg transition-colors ${
-                      equipmentPanel.data.current_serial_number.trim()
-                        ? "bg-pink-600 hover:bg-pink-700"
-                        : "bg-gray-400 cursor-not-allowed"
-                    }`}
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
-
-              {equipmentPanel.data.serial_numbers.length > 0 && (
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Added Serials ({equipmentPanel.data.serial_numbers.length}
-                      )
-                    </label>
-                    {equipmentPanel.data.serial_numbers.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setEquipmentPanel((prev) => ({
-                            ...prev,
-                            data: {
-                              ...prev.data,
-                              serial_numbers: [],
-                              quantity: 0,
-                              total_cost_equipment: 0,
-                            },
-                          }))
-                        }
-                        className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
-                      >
-                        Clear All
-                      </button>
-                    )}
+              <div className="h-full flex flex-col">
+                {/* Panel Header */}
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                      {equipmentPanel.editIndex !== null
+                        ? "Edit Equipment"
+                        : "Add Equipment"}
+                    </h3>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                      Fill in the equipment details
+                    </p>
                   </div>
-                  <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 max-h-40 overflow-y-auto">
-                    <div className="flex flex-wrap gap-2">
-                      {equipmentPanel.data.serial_numbers.map((sn, index) => (
-                        <div
-                          key={index}
-                          className="px-3 py-1 bg-white dark:bg-gray-600 rounded-full text-xs flex items-center border border-gray-200 dark:border-gray-500"
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={closeEquipmentPanel}
+                    className="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <X className="h-4 w-4" />
+                  </motion.button>
+                </div>
+
+                {/* Panel Content */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  <div className="space-y-4">
+                    {/* Equipment Type - Searchable Dropdown */}
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                        Equipment Type*
+                      </label>
+                      <div className="relative">
+                        <div className="relative">
+                          <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 h-3.5 w-3.5" />
+                          <input
+                            type="text"
+                            value={equipmentSearch}
+                            onChange={(e) => setEquipmentSearch(e.target.value)}
+                            onFocus={() => setIsDropdownOpen(true)}
+                            placeholder="Search equipment..."
+                            className="w-full pl-8 pr-8 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                            disabled={equipmentPanel.editIndex !== null}
+                          />
+                          <ChevronDown className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 h-3.5 w-3.5" />
+                        </div>
+
+                        {/* Dropdown Options */}
+                        <AnimatePresence>
+                          {isDropdownOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                            >
+                              {filteredEquipmentTypes.length > 0 ? (
+                                filteredEquipmentTypes.map((equipment) => (
+                                  <motion.div
+                                    key={equipment.id}
+                                    whileHover={{
+                                      backgroundColor:
+                                        "rgba(244, 114, 182, 0.1)",
+                                    }}
+                                    className="px-3 py-2 text-sm cursor-pointer hover:bg-pink-50 dark:hover:bg-gray-600 transition-colors duration-150"
+                                    onClick={() =>
+                                      handleEquipmentSelect(equipment.id)
+                                    }
+                                  >
+                                    <div className="font-medium text-gray-900 dark:text-white">
+                                      {equipment.name}
+                                    </div>
+                                    <div className="text-xs text-gray-600 dark:text-gray-400">
+                                      Model: {equipment.model} • Type:{" "}
+                                      {equipment.equipment_type?.name || "N/A"}
+                                    </div>
+                                  </motion.div>
+                                ))
+                              ) : (
+                                <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400 text-center">
+                                  No equipment found
+                                </div>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Selected Equipment Display */}
+                      {equipmentPanel.data.id && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800"
                         >
-                          {sn}
+                          <div className="text-xs text-green-800 dark:text-green-300">
+                            <span className="font-medium">Selected: </span>
+                            {
+                              equipmentTypes.find(
+                                (eq) =>
+                                  eq.id === Number(equipmentPanel.data.id),
+                              )?.name
+                            }
+                          </div>
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Model and Unit */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                          Model
+                        </label>
+                        <input
+                          type="text"
+                          readOnly
+                          value={equipmentPanel.data.model_number}
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-white cursor-not-allowed"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                          Unit*
+                        </label>
+                        <select
+                          name="unit"
+                          value={equipmentPanel.data.unit}
+                          onChange={handleEquipmentChange}
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                          required
+                        >
+                          <option value="">Select Unit</option>
+                          <option value="pcs">PCS</option>
+                          <option value="sets">SETS</option>
+                          <option value="kgs">KG</option>
+                          <option value="liters">LTR</option>
+                          <option value="meters">MTR</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Cost and Quantity */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                          Unit Cost (₦)*
+                        </label>
+                        <input
+                          type="number"
+                          name="unit_cost"
+                          value={equipmentPanel.data.unit_cost}
+                          onChange={handleEquipmentChange}
+                          min="0"
+                          step="0.01"
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                          Quantity*
+                        </label>
+                        <input
+                          type="number"
+                          readOnly
+                          value={equipmentPanel.data.serial_numbers.length}
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-white cursor-not-allowed"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Total Cost */}
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                        Total Equipment Cost
+                      </label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={
+                          equipmentPanel.data.total_cost_equipment
+                            ? `₦${parseFloat(equipmentPanel.data.total_cost_equipment).toLocaleString()}`
+                            : ""
+                        }
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-white cursor-not-allowed font-medium"
+                      />
+                    </div>
+
+                    {/* Serial Numbers */}
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                        Serial Numbers*
+                      </label>
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 h-3.5 w-3.5" />
+                          <input
+                            type="text"
+                            name="current_serial_number"
+                            value={equipmentPanel.data.current_serial_number}
+                            onChange={handleEquipmentChange}
+                            onKeyDown={handleKeyDown}
+                            className="w-full pl-8 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter serial number"
+                          />
+                        </div>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          type="button"
+                          onClick={addSerialNumber}
+                          disabled={
+                            !equipmentPanel.data.current_serial_number.trim()
+                          }
+                          className={`px-3 py-2 text-white rounded-lg transition-all duration-200 ${
+                            equipmentPanel.data.current_serial_number.trim()
+                              ? "bg-pink-600 hover:bg-pink-700"
+                              : "bg-gray-400 cursor-not-allowed"
+                          }`}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </motion.button>
+                      </div>
+                    </div>
+
+                    {/* Added Serials */}
+                    {equipmentPanel.data.serial_numbers.length > 0 && (
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between items-center">
+                          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                            Added Serials (
+                            {equipmentPanel.data.serial_numbers.length})
+                          </label>
                           <button
                             type="button"
-                            onClick={() => {
-                              setEquipmentPanel((prev) => {
-                                const newSerialNumbers =
-                                  prev.data.serial_numbers.filter(
-                                    (_, i) => i !== index,
-                                  );
-                                const quantity = newSerialNumbers.length;
-                                const unitCost =
-                                  parseFloat(prev.data.unit_cost) || 0;
-
-                                return {
-                                  ...prev,
-                                  data: {
-                                    ...prev.data,
-                                    serial_numbers: newSerialNumbers,
-                                    quantity: quantity,
-                                    total_cost_equipment: unitCost * quantity,
-                                  },
-                                };
-                              });
-                            }}
-                            className="ml-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                            onClick={() =>
+                              setEquipmentPanel((prev) => ({
+                                ...prev,
+                                data: {
+                                  ...prev.data,
+                                  serial_numbers: [],
+                                  quantity: 0,
+                                  total_cost_equipment: 0,
+                                },
+                              }))
+                            }
+                            className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-3 w-3"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
+                            Clear All
                           </button>
                         </div>
-                      ))}
-                    </div>
+                        <div className="p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-200 dark:border-gray-600 max-h-32 overflow-y-auto">
+                          <div className="flex flex-wrap gap-1.5">
+                            {equipmentPanel.data.serial_numbers.map(
+                              (sn, index) => (
+                                <motion.div
+                                  key={index}
+                                  initial={{ scale: 0.8, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  className="px-2 py-1 bg-white dark:bg-gray-600 rounded text-xs flex items-center gap-1.5 border border-gray-200 dark:border-gray-500"
+                                >
+                                  <span className="font-mono">{sn}</span>
+                                  <motion.button
+                                    whileHover={{ scale: 1.2 }}
+                                    whileTap={{ scale: 0.8 }}
+                                    type="button"
+                                    onClick={() => {
+                                      setEquipmentPanel((prev) => {
+                                        const newSerialNumbers =
+                                          prev.data.serial_numbers.filter(
+                                            (_, i) => i !== index,
+                                          );
+                                        const quantity =
+                                          newSerialNumbers.length;
+                                        const unitCost =
+                                          parseFloat(prev.data.unit_cost) || 0;
+                                        return {
+                                          ...prev,
+                                          data: {
+                                            ...prev.data,
+                                            serial_numbers: newSerialNumbers,
+                                            quantity: quantity,
+                                            total_cost_equipment:
+                                              unitCost * quantity,
+                                          },
+                                        };
+                                      });
+                                    }}
+                                    className="text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                                  >
+                                    <X className="h-2.5 w-2.5" />
+                                  </motion.button>
+                                </motion.div>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
 
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
-            <button
-              type="button"
-              onClick={closeEquipmentPanel}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={saveEquipment}
-              disabled={equipmentPanel.data.serial_numbers.length === 0}
-              className={`px-4 py-2 text-white rounded-lg transition-colors ${
-                equipmentPanel.data.serial_numbers.length === 0
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-pink-600 hover:bg-pink-700"
-              }`}
-            >
-              {equipmentPanel.editIndex !== null
-                ? "Update Equipment"
-                : "Add Equipment"}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Overlay for mobile */}
-      {equipmentPanel.isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-10 lg:hidden"
-          onClick={closeEquipmentPanel}
-        />
-      )}
+                {/* Panel Footer */}
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30 flex justify-end gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="button"
+                    onClick={closeEquipmentPanel}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                  >
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="button"
+                    onClick={saveEquipment}
+                    disabled={equipmentPanel.data.serial_numbers.length === 0}
+                    className={`px-4 py-2 text-white text-sm rounded-lg transition-all duration-200 ${
+                      equipmentPanel.data.serial_numbers.length === 0
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700"
+                    }`}
+                  >
+                    {equipmentPanel.editIndex !== null
+                      ? "Update Equipment"
+                      : "Add Equipment"}
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
