@@ -6,6 +6,7 @@ import {
   postEquipmentRepair,
   fetchEquipmentList,
 } from "../../api/axios";
+import ComponentHeader from "@/layout/componentHeader";
 
 export default function TypeForm({
   type = "equipment",
@@ -127,44 +128,7 @@ export default function TypeForm({
 
   return (
     <div className="w-full px-5 min-h-screen py-4">
-           {" "}
-      <div className="flex items-center gap-3 mb-6">
-               {" "}
-        <div className="bg-pink-100 dark:bg-pink-900/50 p-3 rounded-lg">
-                   {" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-pink-600 dark:text-pink-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-                       {" "}
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"
-            />
-                     {" "}
-          </svg>
-                 {" "}
-        </div>
-               {" "}
-        <div>
-                   {" "}
-          <h1 className="text-2xl font-bold dark:text-white text-slate-800">
-                        {title}         {" "}
-          </h1>
-                   {" "}
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                        {description}         {" "}
-          </p>
-                 {" "}
-        </div>
-             {" "}
-      </div>
-           {" "}
+      <ComponentHeader header={title} description={description} />
       <div className="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden p-4 md:p-8 w-full shadow-sm">
                {" "}
         <form

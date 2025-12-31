@@ -14,6 +14,7 @@ import {
   Link2,
   ArrowLeft,
 } from "lucide-react";
+import ComponentHeader from "@/layout/componentHeader";
 
 export default function SuppliersForm() {
   const [formData, setFormData] = useState({
@@ -102,22 +103,13 @@ export default function SuppliersForm() {
   };
 
   return (
-    <div className="w-full min-h-screen py-6 px-2 max-w-7xl mx-auto">
+    <div className="w-full min-h-screen py-6 px-6 max-w-7xl mx-auto">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div className="flex items-center gap-3">
-          <div className="bg-pink-100 dark:bg-pink-900/20 p-2.5 rounded-lg">
-            <Building className="h-5 w-5 text-pink-600 dark:text-pink-400" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Add New Supplier
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter supplier details below
-            </p>
-          </div>
-        </div>
+        <ComponentHeader
+          header={"Add New Supplier"}
+          description={"Enter supplier details below"}
+        />
 
         <button
           onClick={() => navigate("/suppliers-list")}

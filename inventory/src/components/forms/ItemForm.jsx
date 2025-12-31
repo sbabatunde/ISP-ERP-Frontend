@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import ComponentHeader from "@/layout/componentHeader";
 import {
   createEquipment,
   fetchEquipmentTypes,
@@ -194,32 +195,7 @@ export default function ItemForm({
     <div className="w-full min-h-screen py-6 px-2 sm:px-6 lg:px-8">
       {/* Header Section */}
       <div className="max-w-8xl mx-auto">
-        <div className="flex items-center gap-4 mb-8 p-6 bg-gradient-to-r from-indigo-50 to-pink-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border border-indigo-100 dark:border-indigo-800/50">
-          <div className="bg-gradient-to-br from-pink-500 to-indigo-600 p-3 rounded-xl shadow-lg">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-              />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {title}
-            </h1>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              {description}
-            </p>
-          </div>
-        </div>
+        <ComponentHeader header={title} description={description} />
 
         {/* Form Container */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">

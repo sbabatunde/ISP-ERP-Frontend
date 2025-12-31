@@ -8,7 +8,7 @@ import EquipmentForm from "./pages/Equipment-procurement/Equipment";
 import EquipmentProcurementForm from "./pages/Equipment-procurement/EquipmentProcurementForm";
 import EquipmentTypeForm from "./pages/Equipment-procurement/EquipmentTypeForm";
 import SuppliersEdit from "./pages/suppliers/suppliersEdit";
-import ProductTypeList from "./pages/Equipment-procurement/productTypeList";
+import EquipmentList from "./pages/Equipment-procurement/EquipmentList";
 import EquipmentTypeList from "./pages/Equipment-procurement/EquipmentTypeList";
 import CompleteOrder from "./pages/Orders/CompleteOrder";
 import PendingOrder from "./pages/Orders/PendingOrder";
@@ -27,8 +27,9 @@ import ToolTypeForm from "./pages/Equipment-procurement/ToolTypeForm";
 import ToolTypeList from "./pages/Equipment-procurement/ToolTypeList";
 import ToolList from "./pages/Equipment-procurement/ToolList";
 import Repair from "./pages/Repair/Repair";
-import EquipmentList from "./pages/Equipment-procurement/productTypeList";
+// import EquipmentList from "./pages/Equipment-procurement/EquipmentList";
 import RepairList from "./pages/Repair/RepairList.";
+import EquipmentMovementList from "./pages/Equipment-procurement/EquipmentMovementList";
 // import Test from "./pages/Equipment-procurement/test";
 
 // Import any new components you might need for the added routes
@@ -120,10 +121,6 @@ export default function AppRouter() {
           element: <ToolList />, // Create this component
         },
         {
-          path: "products",
-          element: <ProductTypeList />,
-        },
-        {
           path: "procurement",
           element: <EquipmentProcurementForm />,
         },
@@ -159,7 +156,7 @@ export default function AppRouter() {
         },
         {
           path: "movement-history",
-          element: <h1 className="title">Movement History</h1>, // Create this component
+          element: <EquipmentMovementList />, // Create this component
         },
 
         // Workflow Routes

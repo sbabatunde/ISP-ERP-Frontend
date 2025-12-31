@@ -24,18 +24,18 @@ import {
 
 export const navbarLinks = [
   {
-    title: "Dashboard",
+    title: "Overview",
     links: [
       {
-        label: "Overview",
+        label: "Dashboard",
         path: "/",
         icon: Home,
       },
-      {
-        label: "Analytics",
-        path: "/analytics",
-        icon: BarChart3,
-      },
+      // {
+      //   label: "Analytics",
+      //   path: "/analytics",
+      //   icon: BarChart3,
+      // },
       {
         label: "Reports",
         path: "/reports",
@@ -197,37 +197,37 @@ export const navbarLinks = [
     title: "Repair",
     links: [
       {
-        label: "Repairs",
+        label: "Repair Form",
         path: "/repair",
         icon: Wrench,
       },
       {
-        label: "Repairs List",
+        label: "Repair List",
         path: "/repair-list",
         icon: Wrench,
       },
     ],
   },
-  {
-    title: "Workflow",
-    links: [
-      {
-        label: "Pending Tasks",
-        path: "/pending-workflow",
-        icon: Hourglass,
-      },
-      {
-        label: "Completed Tasks",
-        path: "/completed-workflow",
-        icon: CheckSquare,
-      },
-      {
-        label: "Workflow Status",
-        path: "/workflow-status",
-        icon: Workflow,
-      },
-    ],
-  },
+  // {
+  //   title: "Workflow",
+  //   links: [
+  //     {
+  //       label: "Pending Tasks",
+  //       path: "/pending-workflow",
+  //       icon: Hourglass,
+  //     },
+  //     {
+  //       label: "Completed Tasks",
+  //       path: "/completed-workflow",
+  //       icon: CheckSquare,
+  //     },
+  //     {
+  //       label: "Workflow Status",
+  //       path: "/workflow-status",
+  //       icon: Workflow,
+  //     },
+  //   ],
+  // },
   {
     title: "Administration",
     links: [

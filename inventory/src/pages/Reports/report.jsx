@@ -4,6 +4,7 @@ import {
   fetchVendorReports,
   fetchProcurementReports,
   fetchMovementReports,
+  fetchRepairReports,
 } from "@/api/axios";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,12 +23,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import ComponentHeader from "@/layout/componentHeader";
 
 function ReportsDashboard() {
   const [loading, setLoading] = useState(true);
   const [movement, setMovement] = useState([]);
   const [procurement, setProcurement] = useState([]);
   const [vendor, setVendor] = useState([]);
+  const [repair, setRepair] = useState([]);
+  console.log(repair);
 
   useEffect(() => {
     loadAllData();
@@ -36,15 +40,18 @@ function ReportsDashboard() {
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [movementData, procurementData, vendorData] = await Promise.all([
-        fetchMovementReports(),
-        fetchProcurementReports(),
-        fetchVendorReports(),
-      ]);
+      const [movementData, procurementData, vendorData, reportData] =
+        await Promise.all([
+          fetchMovementReports(),
+          fetchProcurementReports(),
+          fetchVendorReports(),
+          fetchRepairReports(),
+        ]);
 
       setMovement(movementData);
       setProcurement(procurementData);
       setVendor(vendorData);
+      setRepair(reportData);
     } catch (err) {
       console.error("Error loading data:", err);
     } finally {
@@ -97,6 +104,33 @@ function ReportsDashboard() {
     { label: "Address", key: "address", width: 30 },
   ];
 
+  const repairHeaders = [
+    { label: "Date", key: "Date", width: 15 },
+    { label: "Equipment Name", key: "Equipment_Name", width: 25 },
+    { label: "Equipment Type", key: "Equipment_Type", width: 15 },
+    { label: "Provider", key: "Provider", width: 20 },
+    { label: "Repair Cost", key: "Repair_Cost", width: 15, type: "number" },
+    { label: "Description", key: "Description", width: 30 },
+    {
+      label: "Days Since Repair",
+      key: "Days_Since_Repair",
+      width: 15,
+      type: "number",
+    },
+  ];
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 12,
+      },
+    },
+  };
+
   if (loading) {
     return (
       <div className="p-6 flex items-center justify-center min-h-[400px]">
@@ -111,28 +145,14 @@ function ReportsDashboard() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Reports Dashboard
-        </h1>
-        <p className="text-gray-600 mt-1 dark:text-white">
-          Generate and download comprehensive inventory reports
-        </p>
-        <div className="mt-4">
-          <Button
-            onClick={loadAllData}
-            variant="outline"
-            size="sm"
-            className="gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh Data
-          </Button>
-        </div>
-      </div>
+
+      <ComponentHeader
+        header={"Reports Dashboard"}
+        description={"  Generate and download comprehensive inventory reports"}
+      />
 
       {/* Reports Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
         {/* Movement Report */}
         <Card>
           <CardHeader className="pb-3">
@@ -259,6 +279,50 @@ function ReportsDashboard() {
               reportTitle="Vendor Directory Report"
               fileName={`vendor-report-${new Date().getFullYear()}`}
               groupByMonth={false}
+              className="w-full"
+            />
+          </CardFooter>
+        </Card>
+
+        {/* Repair Report */}
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-orange-100 rounded-lg">
+                  <FileSpreadsheet className="h-5 w-5 text-orange-600" />
+                </div>
+                <CardTitle>Repair Report</CardTitle>
+              </div>
+              <Badge variant="outline">{repair.length} records</Badge>
+            </div>
+            <CardDescription>
+              Equipment repair history and costs
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              Track equipment repairs, costs, and maintenance history
+            </p>
+            <div className="text-sm text-gray-500 space-y-1">
+              <div className="flex items-center gap-2">
+                <Download className="h-3 w-3" />
+                <span>Excel format with repair details</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>•</span>
+                <span>Includes cost tracking</span>
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <ExcelReport
+              data={repair}
+              headers={repairHeaders}
+              reportTitle="Equipment Repair Report"
+              fileName={`repair-report-${new Date().getFullYear()}`}
+              groupByMonth={true}
+              dateField="Date"
               className="w-full"
             />
           </CardFooter>

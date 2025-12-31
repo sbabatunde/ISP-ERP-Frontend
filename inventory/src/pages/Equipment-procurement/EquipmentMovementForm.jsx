@@ -6,6 +6,7 @@ import apiClient, {
   fetchEquipmentByLocation,
   fetchEquipmentList,
 } from "../../api/axios";
+import ComponentHeader from "@/layout/componentHeader";
 import {
   Truck,
   User,
@@ -26,6 +27,10 @@ import {
   Minus,
   Users,
   Clock,
+  AlertCircle,
+  ArrowRight,
+  CheckCircle,
+  Loader2 as Spinner,
 } from "lucide-react";
 import {
   Table,
@@ -42,8 +47,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2 } from "lucide-react";
-
 import {
   Select,
   SelectContent,
@@ -51,6 +54,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { useTheme } from "@/hooks/use-theme";
 
 function EquipmentMovementForm() {
   const [locations, setLocations] = useState({});
@@ -63,6 +69,8 @@ function EquipmentMovementForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState("");
   const [submitError, setSubmitError] = useState("");
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const [formData, setFormData] = useState({
     from_location_type: "",
@@ -132,6 +140,9 @@ function EquipmentMovementForm() {
       // Show success message
       setSubmitSuccess("Equipment movement submitted successfully!");
       setSubmitError("");
+
+      // Clear success message after 5 seconds
+      setTimeout(() => setSubmitSuccess(""), 5000);
     } catch (error) {
       console.error("Error submitting movement:", error);
 
@@ -215,17 +226,6 @@ function EquipmentMovementForm() {
     searchTerm,
   ]);
 
-  const getLocationsData = (type) => {
-    switch (type) {
-      case "from_location_type":
-        return getFromData;
-      case "to_location_type":
-        return getToData;
-      default:
-        return [];
-    }
-  };
-
   const getLocationName = (location, type) => {
     switch (type) {
       case "store":
@@ -239,19 +239,16 @@ function EquipmentMovementForm() {
     }
   };
 
-  // Helper function to check if an equipment item is selected
   const isEquipmentSelected = (serialNumber) => {
     return formData.equipment.some((eq) =>
       eq.serial_numbers.includes(serialNumber),
     );
   };
 
-  // Helper function to add/remove equipment by serial number
   const toggleEquipmentSelection = (item) => {
     const isSelected = isEquipmentSelected(item.serial_number);
 
     if (isSelected) {
-      // Remove by serial number from all equipment items
       const updatedEquipment = formData.equipment
         .map((eq) => ({
           ...eq,
@@ -259,20 +256,18 @@ function EquipmentMovementForm() {
             (sn) => sn !== item.serial_number,
           ),
         }))
-        .filter((eq) => eq.serial_numbers.length > 0); // Remove empty equipment items
+        .filter((eq) => eq.serial_numbers.length > 0);
 
       setFormData({
         ...formData,
         equipment: updatedEquipment,
       });
     } else {
-      // Check if we already have this equipment type in the selection
       const existingEquipmentIndex = formData.equipment.findIndex(
         (eq) => eq.id === item.equipment.id,
       );
 
       if (existingEquipmentIndex >= 0) {
-        // Add serial number to existing equipment type
         const updatedEquipment = [...formData.equipment];
         updatedEquipment[existingEquipmentIndex] = {
           ...updatedEquipment[existingEquipmentIndex],
@@ -286,7 +281,6 @@ function EquipmentMovementForm() {
           equipment: updatedEquipment,
         });
       } else {
-        // Create new equipment type with serial number
         setFormData({
           ...formData,
           equipment: [
@@ -304,17 +298,16 @@ function EquipmentMovementForm() {
       }
     }
   };
+
   const scrollRef = useRef(null);
   useEffect(() => {
     if (!loading && scrollRef.current) {
-      // Small delay to ensure DOM is fully rendered
       setTimeout(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 100);
     }
   }, [loading]);
 
-  // Helper function to remove a specific serial number
   const removeSerialNumber = (equipmentId, serialNumber) => {
     const updatedEquipment = formData.equipment
       .map((eq) =>
@@ -327,7 +320,7 @@ function EquipmentMovementForm() {
             }
           : eq,
       )
-      .filter((eq) => eq.serial_numbers.length > 0); // Remove empty equipment items
+      .filter((eq) => eq.serial_numbers.length > 0);
 
     setFormData({
       ...formData,
@@ -335,13 +328,11 @@ function EquipmentMovementForm() {
     });
   };
 
-  // Helper function to get selected count for an equipment type
   const getSelectedCountForEquipment = (equipmentId) => {
     const equipment = formData.equipment.find((eq) => eq.id === equipmentId);
     return equipment ? equipment.serial_numbers.length : 0;
   };
 
-  // Calculate total number of selected serial numbers
   const totalSelectedSerialNumbers = formData.equipment.reduce(
     (total, eq) => total + eq.serial_numbers.length,
     0,
@@ -354,30 +345,35 @@ function EquipmentMovementForm() {
 
   if (loading) {
     return (
-      <>
-        <div>loading</div>
-      </>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center">
+          <Spinner className="h-12 w-12 text-primary animate-spin" />
+          <p className="mt-4 text-muted-foreground">Loading form...</p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 lg:p-6">
+    <div
+      className={cn(
+        "min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 p-4 lg:p-6 transition-colors duration-300",
+      )}
+    >
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div className="text-center space-y-3 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-white">
-          <div className="flex items-center justify-center gap-3">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Equipment Movement
-              </h1>
-              <p className="text-gray-600 text-lg mt-1">
-                Transfer equipment between different locations
-              </p>
-            </div>
-          </div>
+        <ComponentHeader
+          header={"Equipment Movement"}
+          description={"Transfer equipment between different locations"}
+        />
 
-          {/* Progress Indicators */}
-          <div className="flex justify-center items-center gap-8 pt-4">
+        {/* Progress Indicators */}
+        <div className="text-center space-y-3 bg-card/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm border">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-center items-center gap-8 pt-4 flex-wrap"
+          >
             {[
               {
                 label: "Locations",
@@ -401,43 +397,53 @@ function EquipmentMovementForm() {
               },
             ].map((step, index) => (
               <div key={index} className="flex items-center gap-3">
-                <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className={cn(
+                    "flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all",
                     step.completed
-                      ? "bg-green-500 border-green-500 text-white"
-                      : "bg-white border-gray-300 text-gray-400"
-                  }`}
+                      ? "bg-primary border-primary text-primary-foreground shadow-lg"
+                      : "bg-background border-muted text-muted-foreground",
+                  )}
                 >
                   <step.icon className="h-5 w-5" />
-                </div>
+                </motion.div>
                 <span
-                  className={`text-sm font-medium ${step.completed ? "text-green-600" : "text-gray-500"}`}
+                  className={cn(
+                    "text-sm font-medium transition-colors",
+                    step.completed ? "text-primary" : "text-muted-foreground",
+                  )}
                 >
                   {step.label}
                 </span>
                 {index < 3 && (
                   <div
-                    className={`w-8 h-0.5 ${step.completed ? "bg-green-500" : "bg-gray-300"}`}
+                    className={cn(
+                      "w-8 h-0.5 transition-colors",
+                      step.completed ? "bg-primary" : "bg-muted",
+                    )}
                   />
                 )}
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         <div ref={scrollRef} className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Left Column - Locations */}
           <div className="xl:col-span-2 space-y-6">
             {/* Location Details Card */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
-                <CardTitle className="flex items-center gap-3 text-xl text-gray-800">
-                  <MapPin className="h-6 w-6 text-blue-600" />
+            <Card className="shadow-lg border bg-card">
+              <CardHeader
+                className={cn(
+                  "pb-4 border-b rounded-t-xl",
+                  "bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20",
+                )}
+              >
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <MapPin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   Location Details
-                  <Badge
-                    variant="secondary"
-                    className="ml-2 bg-blue-100 text-blue-800"
-                  >
+                  <Badge variant="secondary" className="ml-2">
                     Required
                   </Badge>
                 </CardTitle>
@@ -458,10 +464,15 @@ function EquipmentMovementForm() {
                   ].map((item, index) => (
                     <div key={index} className="space-y-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-blue-100 text-blue-600">
+                        <div
+                          className={cn(
+                            "p-2 rounded-xl",
+                            "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+                          )}
+                        >
                           <item.icon className="h-5 w-5" />
                         </div>
-                        <Label className="text-sm font-semibold text-gray-700">
+                        <Label className="text-sm font-semibold">
                           {item.label}
                         </Label>
                       </div>
@@ -473,7 +484,7 @@ function EquipmentMovementForm() {
                           }}
                           value={formData[item.name]}
                         >
-                          <SelectTrigger className="w-full bg-gray-50 border-gray-200 h-11 rounded-lg">
+                          <SelectTrigger className="w-full h-11">
                             <SelectValue
                               placeholder={`Select ${item.label.split(" ")[0]} Type`}
                             />
@@ -506,7 +517,7 @@ function EquipmentMovementForm() {
                         {formData[item.name] && (
                           <div className="space-y-2">
                             <div className="relative">
-                              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                               <Input
                                 placeholder={`Search ${formData[item.name]}...`}
                                 value={
@@ -523,25 +534,27 @@ function EquipmentMovementForm() {
                                     [searchKey]: e.target.value,
                                   });
                                 }}
-                                className="pl-10 bg-white border-gray-200 rounded-lg"
+                                className="pl-10"
                               />
                             </div>
 
-                            <ScrollArea className="h-32 rounded-lg border border-gray-200 bg-white">
-                              {getLocationsData(item.name).length > 0 ? (
-                                getLocationsData(item.name).map((location) => {
+                            <ScrollArea className="h-32 rounded-lg border">
+                              {getFromData.length > 0 ? (
+                                getFromData.map((location) => {
                                   const isSelected =
                                     formData[
                                       item.name.replace("type", "id")
                                     ] === location.id.toString();
                                   return (
-                                    <div
+                                    <motion.div
                                       key={location.id}
-                                      className={`p-3 border-b cursor-pointer transition-all duration-200 ${
+                                      whileHover={{ scale: 1.01 }}
+                                      className={cn(
+                                        "p-3 border-b cursor-pointer transition-all duration-200",
                                         isSelected
-                                          ? "bg-blue-50 border-blue-200 shadow-sm"
-                                          : "hover:bg-gray-50 hover:shadow-sm"
-                                      }`}
+                                          ? "bg-primary/10 border-primary/20"
+                                          : "hover:bg-accent",
+                                      )}
                                       onClick={() => {
                                         const idKey = item.name.replace(
                                           "type",
@@ -566,21 +579,21 @@ function EquipmentMovementForm() {
                                       }}
                                     >
                                       <div className="flex items-center justify-between">
-                                        <span className="font-medium text-gray-900 text-sm">
+                                        <span className="font-medium text-sm">
                                           {getLocationName(
                                             location,
                                             formData[item.name],
                                           )}
                                         </span>
                                         {isSelected && (
-                                          <Check className="h-4 w-4 text-green-600" />
+                                          <Check className="h-4 w-4 text-primary" />
                                         )}
                                       </div>
-                                    </div>
+                                    </motion.div>
                                   );
                                 })
                               ) : (
-                                <div className="p-4 text-center text-gray-500 text-sm">
+                                <div className="p-4 text-center text-muted-foreground text-sm">
                                   No locations found
                                 </div>
                               )}
@@ -595,15 +608,17 @@ function EquipmentMovementForm() {
             </Card>
 
             {/* Equipment Selection Card */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4 border-b bg-gradient-to-r from-orange-50 to-amber-50 rounded-t-xl">
-                <CardTitle className="flex items-center gap-3 text-xl text-gray-800">
-                  <ClipboardList className="h-6 w-6 text-orange-600" />
+            <Card className="shadow-lg border bg-card">
+              <CardHeader
+                className={cn(
+                  "pb-4 border-b rounded-t-xl",
+                  "bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20",
+                )}
+              >
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <ClipboardList className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                   Select Equipment to Move
-                  <Badge
-                    variant="secondary"
-                    className="ml-2 bg-orange-100 text-orange-800"
-                  >
+                  <Badge variant="secondary" className="ml-2">
                     {totalSelectedSerialNumbers} selected
                   </Badge>
                 </CardTitle>
@@ -612,30 +627,35 @@ function EquipmentMovementForm() {
                 <div className="space-y-4">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-orange-100 text-orange-600">
+                      <div
+                        className={cn(
+                          "p-2 rounded-xl",
+                          "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
+                        )}
+                      >
                         <Package className="h-5 w-5" />
                       </div>
                       <div>
-                        <Label className="text-sm font-semibold text-gray-700">
+                        <Label className="text-sm font-semibold">
                           Available Equipment
                         </Label>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           Select equipment by serial number
                         </p>
                       </div>
                     </div>
-                    <Badge variant="outline" className="bg-white">
+                    <Badge variant="outline">
                       {getEquipmentForSelectedLocation.length} items available
                     </Badge>
                   </div>
 
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Search equipment by name, model, or serial number..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 bg-white border-gray-200 rounded-lg"
+                      className="pl-10"
                     />
                     {searchTerm && (
                       <Button
@@ -649,7 +669,7 @@ function EquipmentMovementForm() {
                     )}
                   </div>
 
-                  <ScrollArea className="h-64 rounded-lg border border-gray-200 bg-white">
+                  <ScrollArea className="h-64 rounded-lg border">
                     {formData.from_location_id ? (
                       getEquipmentForSelectedLocation.length > 0 ? (
                         getEquipmentForSelectedLocation.map((item) => {
@@ -661,44 +681,51 @@ function EquipmentMovementForm() {
                           );
 
                           return (
-                            <div
+                            <motion.div
                               key={`${item.equipment.id}-${item.serial_number}`}
-                              className={`p-4 border-b transition-all duration-200 ${
+                              whileHover={{ scale: 1.01 }}
+                              className={cn(
+                                "p-4 border-b transition-all duration-200",
                                 isSelected
-                                  ? "bg-green-50 border-green-200 shadow-sm"
-                                  : "hover:bg-gray-50 hover:shadow-sm"
-                              }`}
+                                  ? "bg-primary/10 border-primary/20"
+                                  : "hover:bg-accent",
+                              )}
                             >
                               <div className="flex items-center justify-between">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-1">
-                                    <p className="font-semibold text-gray-900">
+                                    <p className="font-semibold">
                                       {item.equipment?.name}
                                     </p>
                                     {selectedCount > 0 && (
                                       <Badge
                                         variant="outline"
-                                        className="bg-blue-100 text-blue-700 border-blue-200 text-xs"
+                                        className="text-xs"
                                       >
                                         {selectedCount} selected
                                       </Badge>
                                     )}
                                     {isSelected && (
                                       <Badge
-                                        variant="outline"
-                                        className="bg-green-100 text-green-700 border-green-200 text-xs"
+                                        variant="secondary"
+                                        className="text-xs bg-primary/20"
                                       >
-                                        This item selected
+                                        Selected
                                       </Badge>
                                     )}
                                   </div>
-                                  <p className="text-sm text-gray-600">
+                                  <p className="text-sm text-muted-foreground">
                                     Model: {item.equipment?.model}
                                   </p>
-                                  <p className="text-sm font-mono text-gray-800 bg-gray-100 px-2 py-1 rounded mt-1 inline-block">
+                                  <p
+                                    className={cn(
+                                      "text-sm font-mono px-2 py-1 rounded mt-1 inline-block",
+                                      "bg-accent text-accent-foreground",
+                                    )}
+                                  >
                                     Serial: {item.serial_number}
                                   </p>
-                                  <p className="text-xs text-gray-500 mt-1">
+                                  <p className="text-xs text-muted-foreground mt-1">
                                     Unit Cost: ₦
                                     {parseFloat(
                                       item.equipment?.unit_cost || 0,
@@ -709,11 +736,11 @@ function EquipmentMovementForm() {
                                   onClick={() => toggleEquipmentSelection(item)}
                                   variant={isSelected ? "outline" : "default"}
                                   size="sm"
-                                  className={`whitespace-nowrap ${
-                                    isSelected
-                                      ? "border-red-200 text-red-700 hover:bg-red-50"
-                                      : "bg-pink-600 hover:bg-pink-700"
-                                  }`}
+                                  className={cn(
+                                    "whitespace-nowrap transition-all",
+                                    isSelected &&
+                                      "border-destructive text-destructive hover:bg-destructive/10",
+                                  )}
                                 >
                                   {isSelected ? (
                                     <>
@@ -728,12 +755,12 @@ function EquipmentMovementForm() {
                                   )}
                                 </Button>
                               </div>
-                            </div>
+                            </motion.div>
                           );
                         })
                       ) : (
-                        <div className="p-8 text-center text-gray-500">
-                          <Package className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                        <div className="p-8 text-center text-muted-foreground">
+                          <Package className="h-12 w-12 mx-auto mb-3 opacity-50" />
                           <p className="font-medium">
                             No equipment found at this location
                           </p>
@@ -743,8 +770,8 @@ function EquipmentMovementForm() {
                         </div>
                       )
                     ) : (
-                      <div className="p-8 text-center text-gray-500">
-                        <MapPin className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                      <div className="p-8 text-center text-muted-foreground">
+                        <MapPin className="h-12 w-12 mx-auto mb-3 opacity-50" />
                         <p className="font-medium">Select a source location</p>
                         <p className="text-sm mt-1">
                           Choose a source location to view available equipment
@@ -755,8 +782,12 @@ function EquipmentMovementForm() {
 
                   {/* Selected Equipment Summary */}
                   {formData.equipment.length > 0 && (
-                    <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 p-4 rounded-lg border border-primary/20 bg-primary/5"
+                    >
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
                         <Check className="h-4 w-4" />
                         Selected Equipment ({totalSelectedSerialNumbers} serial
                         numbers)
@@ -765,17 +796,17 @@ function EquipmentMovementForm() {
                         {formData.equipment.map((eq, index) => (
                           <div
                             key={index}
-                            className="bg-white p-3 rounded border"
+                            className="bg-background p-3 rounded border"
                           >
                             <div className="flex justify-between items-start mb-2">
                               <div>
                                 <span className="font-medium">{eq.name}</span>
-                                <span className="text-gray-600 ml-2">
+                                <span className="text-muted-foreground ml-2">
                                   ({eq.model_number})
                                 </span>
                                 <Badge
                                   variant="outline"
-                                  className="ml-2 bg-gray-100 text-gray-700 text-xs"
+                                  className="ml-2 text-xs"
                                 >
                                   {eq.serial_numbers.length} serials
                                 </Badge>
@@ -785,13 +816,13 @@ function EquipmentMovementForm() {
                               {eq.serial_numbers.map((serial, serialIndex) => (
                                 <div
                                   key={serialIndex}
-                                  className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded text-xs"
+                                  className="flex items-center gap-1 bg-accent px-2 py-1 rounded text-xs"
                                 >
-                                  <code>{serial}</code>
+                                  <code className="font-mono">{serial}</code>
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="h-4 w-4 p-0 text-red-600 hover:text-red-800"
+                                    className="h-4 w-4 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
                                     onClick={() =>
                                       removeSerialNumber(eq.id, serial)
                                     }
@@ -804,7 +835,7 @@ function EquipmentMovementForm() {
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </motion.div>
                   )}
                 </div>
               </CardContent>
@@ -814,17 +845,22 @@ function EquipmentMovementForm() {
           {/* Right Column - Details */}
           <div className="space-y-6">
             {/* Movement Details */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4 border-b bg-gradient-to-r from-purple-50 to-violet-50 rounded-t-xl">
-                <CardTitle className="flex items-center gap-3 text-xl text-gray-800">
-                  <Clock className="h-6 w-6 text-purple-600" />
+            <Card className="shadow-lg border bg-card">
+              <CardHeader
+                className={cn(
+                  "pb-4 border-b rounded-t-xl",
+                  "bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20",
+                )}
+              >
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <Clock className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                   Movement Details
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <Label className="text-sm font-medium flex items-center gap-2">
                       <Move className="h-4 w-4" />
                       Movement Type
                     </Label>
@@ -834,7 +870,7 @@ function EquipmentMovementForm() {
                         setFormData({ ...formData, movement_type: value });
                       }}
                     >
-                      <SelectTrigger className="w-full bg-gray-50 border-gray-200 h-11 rounded-lg">
+                      <SelectTrigger className="w-full h-11">
                         <SelectValue placeholder="Select movement type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -848,7 +884,7 @@ function EquipmentMovementForm() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <Label className="text-sm font-medium flex items-center gap-2">
                       <Calendar className="h-4 w-4" />
                       Movement Date
                     </Label>
@@ -861,12 +897,11 @@ function EquipmentMovementForm() {
                           movement_date: e.target.value,
                         })
                       }
-                      className="rounded-lg"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <Label className="text-sm font-medium flex items-center gap-2">
                       Logistics Cost
                     </Label>
                     <Input
@@ -879,7 +914,6 @@ function EquipmentMovementForm() {
                           logistics_cost: e.target.value,
                         })
                       }
-                      className="rounded-lg"
                     />
                   </div>
                 </div>
@@ -887,10 +921,15 @@ function EquipmentMovementForm() {
             </Card>
 
             {/* Personnel */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4 border-b bg-gradient-to-r from-teal-50 to-cyan-50 rounded-t-xl">
-                <CardTitle className="flex items-center gap-3 text-xl text-gray-800">
-                  <Users className="h-6 w-6 text-teal-600" />
+            <Card className="shadow-lg border bg-card">
+              <CardHeader
+                className={cn(
+                  "pb-4 border-b rounded-t-xl",
+                  "bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20",
+                )}
+              >
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <Users className="h-6 w-6 text-teal-600 dark:text-teal-400" />
                   Personnel
                 </CardTitle>
               </CardHeader>
@@ -905,7 +944,7 @@ function EquipmentMovementForm() {
                     },
                   ].map((item, index) => (
                     <div key={index} className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
                         <item.icon className="h-4 w-4" />
                         {item.placeholder}
                       </Label>
@@ -915,7 +954,7 @@ function EquipmentMovementForm() {
                           setFormData({ ...formData, [item.name]: value });
                         }}
                       >
-                        <SelectTrigger className="w-full bg-gray-50 border-gray-200 h-11 rounded-lg">
+                        <SelectTrigger className="w-full h-11">
                           <SelectValue placeholder={item.placeholder} />
                         </SelectTrigger>
                         <SelectContent>
@@ -936,74 +975,88 @@ function EquipmentMovementForm() {
             </Card>
 
             {/* Summary Card */}
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-              <CardHeader className="pb-4 border-b border-gray-700 rounded-t-xl">
-                <CardTitle className="flex items-center gap-3 text-xl">
-                  <Check className="h-6 w-6 text-green-400" />
+            <Card className="shadow-lg border bg-gradient-to-br from-primary/90 to-primary">
+              <CardHeader className="pb-4 border-b border-primary/30 rounded-t-xl">
+                <CardTitle className="flex items-center gap-3 text-xl text-primary-foreground">
+                  <CheckCircle className="h-6 w-6" />
                   Movement Summary
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
-                <div className="space-y-3">
+                <div className="space-y-3 text-primary-foreground/90">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-300">Equipment Types:</span>
+                    <span>Equipment Types:</span>
                     <Badge
                       variant="secondary"
-                      className="bg-blue-500 text-white"
+                      className="bg-primary-foreground/20 text-primary-foreground"
                     >
                       {formData.equipment.length}
                     </Badge>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-300">Status:</span>
+                    <span>Status:</span>
                     <Badge
                       variant="secondary"
-                      className={isFormValid ? "bg-green-500" : "bg-yellow-500"}
+                      className={cn(
+                        isFormValid ? "bg-green-500/90" : "bg-yellow-500/90",
+                        "text-primary-foreground",
+                      )}
                     >
                       {isFormValid ? "Ready to Move" : "Incomplete"}
                     </Badge>
                   </div>
 
                   {/* Success/Error Messages */}
-                  {submitSuccess && (
-                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <Check className="h-4 w-4 text-green-600" />
-                        <p className="text-sm font-medium text-green-800">
-                          {submitSuccess}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {submitSuccess && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="p-3 bg-green-500/20 border border-green-500/30 rounded-lg"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-green-400" />
+                          <p className="text-sm font-medium">{submitSuccess}</p>
+                        </div>
+                      </motion.div>
+                    )}
 
-                  {submitError && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <X className="h-4 w-4 text-red-600" />
-                        <p className="text-sm font-medium text-red-800">
-                          {submitError}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="p-3 bg-destructive/20 border border-destructive/30 rounded-lg"
+                      >
+                        <div className="flex items-center gap-2">
+                          <AlertCircle className="h-4 w-4 text-destructive" />
+                          <p className="text-sm font-medium">{submitError}</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-                  <Separator className="bg-gray-700" />
+                  <Separator className="bg-primary-foreground/20" />
                   <div className="pt-2">
                     <Button
                       onClick={handleMovementSubmit}
                       disabled={!isFormValid || isSubmitting}
-                      className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      className={cn(
+                        "w-full bg-primary-foreground text-primary hover:bg-primary-foreground/90",
+                        "disabled:opacity-50 disabled:cursor-not-allowed",
+                      )}
                       size="lg"
                     >
-                      {loading ? (
+                      {isSubmitting ? (
                         <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          <Spinner className="h-4 w-4 mr-2 animate-spin" />
                           Processing...
                         </>
                       ) : (
                         <>
-                          <Send className="h-4 w-4 mr-2" />
+                          <ArrowRight className="h-4 w-4 mr-2" />
                           Move Equipment
                         </>
                       )}

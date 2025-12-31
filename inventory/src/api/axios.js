@@ -56,6 +56,11 @@ export const fetchVendorReports = async () => {
   return response.data || [];
 };
 
+export const fetchRepairReports = async () => {
+  const response = await apiClient.get("/inventory/reports/repairs");
+  return response.data || [];
+};
+
 export const fetchProcurementReports = async () => {
   const response = await apiClient.get("/inventory/reports/procurements");
   return response.data || [];

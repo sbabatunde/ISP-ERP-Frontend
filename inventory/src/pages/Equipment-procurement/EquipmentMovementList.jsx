@@ -1,46 +1,20 @@
-// import React from "react";
-// import ProductTypeList from "@/components/list/tool-equipment-list";
-// function ToolList() {
-//   return (
-//     <>
-//       <ProductTypeList type="tool" />
-//     </>
-//   );
-// }
-
-// export default ToolList;
-
 import React from "react";
 import Tables from "@/layout/tables";
 import { useState, useEffect } from "react";
-import {
-  fetchToolList,
-  updateSupplier,
-  deleteSupplierDetails,
-} from "../../api/axios";
+import { fetchEquipmentMovementList } from "../../api/axios";
 import { MdReadMore } from "react-icons/md";
 import { Edit } from "lucide-react";
 import { MdDelete } from "react-icons/md";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-
-function ToolList() {
-  const [data, setData] = useState([]);
-  console.log(data);
+function EquipmentMovementList() {
+  const [repairs, setRepairs] = useState([]);
+  console.log(repairs);
   const [loading, setLoading] = useState(false);
   async function getSuppliers() {
     try {
       setLoading(true);
-      const res = await fetchToolList();
-      setData(res.data);
+      const res = await fetchEquipmentMovementList();
+      //   const data = Array.isArray(res) ? res : (res?.data ?? []);
+      setRepairs(res);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -53,30 +27,30 @@ function ToolList() {
 
   const Header = [
     {
-      key: "name",
-      label: "Name",
+      key: "equipments_string",
+      label: "Equipments",
       sortable: false,
     },
     {
-      key: "tool_type.name",
-      label: "Tool Type",
+      key: "from_location.name",
+      label: "From Location",
       sortable: false,
     },
     {
-      key: "location.name",
-      label: "Location",
+      key: "to_location.name",
+      label: "To Loaction",
       sortable: false,
     },
     {
-      key: "cost",
-      label: "Cost",
+      key: "from_location.type",
+      label: "Currently with",
+      sortable: false,
+    },
+    {
+      key: "logistics_cost",
+      label: "Logistic Cost",
       sortable: false,
       type: "currency",
-    },
-    {
-      key: "status",
-      label: "Status",
-      sortable: false,
     },
   ];
   const actionItems = [
@@ -85,11 +59,7 @@ function ToolList() {
       icon: { name: MdReadMore, style: "text-green-500" },
       onClick: (row) => console.log("View", row),
     },
-    {
-      label: "Edit",
-      icon: { name: Edit, style: "text-yellow-500" },
-      onClick: (row) => console.log("Edit", row),
-    },
+
     {
       label: "Delete",
       icon: { name: MdDelete, style: "text-red-500" },
@@ -101,9 +71,9 @@ function ToolList() {
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
         <Tables
-          header={"Tool List"}
-          description={"Manage invetory Tools and information"}
-          data={data}
+          header={"Movement History"}
+          description={"Manage Inventory movements information"}
+          data={repairs}
           tableHeaders={Header}
           loading={loading}
           emptyMessage="No suppliers found"
@@ -114,4 +84,4 @@ function ToolList() {
   );
 }
 
-export default ToolList;
+export default EquipmentMovementList;
